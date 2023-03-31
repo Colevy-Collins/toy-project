@@ -1,6 +1,7 @@
 // run "npm install . "
 // reset counter/totalPost to 0
 // remove all the documents in the posts
+//test
 
 const {MongoClient} = require('mongodb');
 
