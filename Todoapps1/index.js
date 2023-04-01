@@ -1,7 +1,6 @@
 // run "npm install . "
 // reset counter/totalPost to 0
 // remove all the documents in the posts
-//test if works
 
 const {MongoClient} = require('mongodb');
 
@@ -51,14 +50,22 @@ async function runAddPost(req, resp) {
       let res = await counter.findOne(query);
       console.log(res);
       const totalPost = res.totalPost;
+      try{
+        let newPost = await posts.findOne({}, {sort:{$natural:-1}})
+        var newID = newPost._id;
+      }
+      catch (e){
+        var newID = 0;
+      }
 
-      query = { _id : totalPost + 1, title : req.body.title, date : req.body.date};
+      query = { _id : newID + 1, title : req.body.title, date : req.body.date};
       res = await posts.insertOne(query);
       
       query = {name : 'Total Post'};
       let stage = { $inc: {totalPost:1} };
       await counter.updateOne(query, stage);
-      resp.send('Stored to Mongodb OK');
+      resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/"><div style="border:1px solid black;"><h2 style="">Return Home</h2></div></a>');
+      //resp.send('Stored to MongoDB OK');
     } catch (e) {
       console.error(e);
     }

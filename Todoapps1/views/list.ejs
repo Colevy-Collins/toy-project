@@ -21,6 +21,7 @@
             <li class="list-group-item">
                 <h4> Title : <%= posts[i].title %> </h4>
                 <p> Date : <%= posts[i].date %> </p>
+                <button class="update" data-id="<%= posts[i]._id %>">Update</button>
                 <button class="delete" data-id="<%= posts[i]._id %>">Delete</button>
             </li>
         <% } %>
