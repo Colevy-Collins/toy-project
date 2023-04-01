@@ -30,12 +30,14 @@ app.listen(5500, function() {
 });
 
 app.get('/', function(req, resp) { 
+
   try {
     resp.render('write.ejs')
   } catch (e) {
     console.error(e);
   } 
 });
+
 
 app.post('/add', function(req, resp) {
     runAddPost(req, resp);
@@ -91,6 +93,12 @@ app.delete('/delete', async function(req, resp){
     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
     console.log(req.body._id);
     try {
+      resp.render('writeU.ejs')
+    } catch (e) {
+      console.error(e);
+    } 
+
+    try {
         const counter = db.collection(COUNTER);
         const posts = db.collection(POSTS)
         const res = await posts.deleteOne(req.body); 
@@ -104,11 +112,12 @@ app.delete('/delete', async function(req, resp){
     }
     catch (e) {
         console.error(e);
-    } 
+    } s
 }); 
 
 app.post('/update', async function(req, resp){
   req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+  console.log(req.body._id);
 
   try {
       const posts = db.collection(POSTS);
@@ -117,7 +126,7 @@ app.post('/update', async function(req, resp){
       const stage = { $set: {title : req.body.title, date : req.body.date}};
       await posts.updateOne(query, stage);
 
-      resp.send('Stored to Mongodb OK');
+      console.log('Stored to Mongodb OK');
     } catch (e) {
       console.error(e);
     }
