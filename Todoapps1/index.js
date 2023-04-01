@@ -106,3 +106,20 @@ app.delete('/delete', async function(req, resp){
         console.error(e);
     } 
 }); 
+
+app.post('/update', async function(req, resp){
+  req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+
+  try {
+      const posts = db.collection(POSTS);
+
+      const query = {_id : req.body._id};
+      const stage = { $set: {title : req.body.title, date : req.body.date}};
+      await counter.updateOne(query, stage);
+
+      resp.send('Stored to Mongodb OK');
+    } catch (e) {
+      console.error(e);
+    }
+
+});
