@@ -115,7 +115,7 @@ app.post('/update', async function(req, resp){
 
       const query = {_id : req.body._id};
       const stage = { $set: {title : req.body.title, date : req.body.date}};
-      await counter.updateOne(query, stage);
+      await posts.updateOne(query, stage);
 
       resp.send('Stored to Mongodb OK');
     } catch (e) {
