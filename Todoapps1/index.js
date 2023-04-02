@@ -112,7 +112,7 @@ app.delete('/delete', async function(req, resp){
     }
     catch (e) {
         console.error(e);
-    } s
+    }
 }); 
 
 app.post('/update', async function(req, resp){
