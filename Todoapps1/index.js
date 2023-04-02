@@ -91,13 +91,6 @@ async function runListGet(req, resp) {
 
 app.delete('/delete', async function(req, resp){
     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
-    console.log(req.body._id);
-    try {
-      resp.render('writeU.ejs')
-    } catch (e) {
-      console.error(e);
-    } 
-
     try {
         const counter = db.collection(COUNTER);
         const posts = db.collection(POSTS)
