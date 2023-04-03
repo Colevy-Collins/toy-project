@@ -118,7 +118,7 @@ app.post('/update', async function(req, resp){
       const query = {_id : req.body._id};
       const stage = { $set: {title : req.body.title, date : req.body.date}};
       await posts.updateOne(query, stage);
-      resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/"><div style="border:1px solid black;"><h2 style="">Return Home</h2></div></a>');
+      resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/list"><div style="border:1px solid black;"><h2 style="">Return to list</h2></div></a>');
 
       console.log('Stored to Mongodb OK');
     } catch (e) {
