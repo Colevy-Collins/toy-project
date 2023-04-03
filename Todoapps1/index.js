@@ -38,6 +38,15 @@ app.get('/', function(req, resp) {
   } 
 });
 
+app.get('/instruction', function(req, resp) { 
+
+  try {
+    resp.render('instruction.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
 
 app.post('/add', function(req, resp) {
     runAddPost(req, resp);
