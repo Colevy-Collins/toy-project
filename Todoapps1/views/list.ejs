@@ -20,11 +20,11 @@
     <form action="/update" method="POST">
       <div class="form-group">
         <label>What to do today</label>
-        <input type="text" class="form-control" name="title"/>
+        <input type="text" class="form-control" name="title" id="title"/>
       </div>
       <div class="form-group">
         <label>Date</label>
-        <input type="text" class="form-control" name="date"/>
+        <input type="text" class="form-control" name="date" id="date"/>
       </div>
       <div class="form-group">
         <label>ID</label>
@@ -40,7 +40,7 @@
                 <h4> Title : <%= posts[i].title %> </h4>
                 <p> Date : <%= posts[i].date %> </p>
                 <p> Date : <%= posts[i]._id %> </p>
-                <input type="button" onclick="document.getElementById('_id').value='<%= posts[i]._id %>'" value="Update" />
+                <input type="button" onclick="document.getElementById('_id').value='<%= posts[i]._id %>' , document.getElementById('date').value='<%= posts[i].date %>' , document.getElementById('title').value='<%= posts[i].title %>'"  value="Update" />
                 <button class="delete" data-id="<%= posts[i]._id %>">Delete</button>
             </li>
         <% } %>
