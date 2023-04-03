@@ -3,7 +3,6 @@ const baseURL = "http://localhost:5500"
 
 describe("POST /update", () => {
       const newTodo = {
-        _id : 1,
         title : "test1",
         date : "now",
       }
