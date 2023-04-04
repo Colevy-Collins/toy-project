@@ -53,15 +53,15 @@ app.post('/add', function(req, resp) {
 });
 
 async function runAddPost(req, resp) {
- console.log("add function");
- console.log(req.body);
+ //console.log("add function");
+ //console.log(req.body);
     try {
       const counter = db.collection(COUNTER);
       const posts = db.collection(POSTS);      
   
       let query = {name : 'Total Post'};
       let res = await counter.findOne(query);
-      console.log(res);
+      //console.log(res);
       const totalPost = res.totalPost;
       try{
         let newPost = await posts.findOne({}, {sort:{$natural:-1}})
@@ -105,7 +105,7 @@ app.get('/Test', async function(req, resp){
       const find = String(req.body.title);
       const posts = db.collection(POSTS);
       const res = await posts.findOne({title : find});
-      console.log("listTest function");
+      //console.log("listTest function");
       resp.send(res);
     } catch (e) {
       console.error(e);
@@ -113,9 +113,9 @@ app.get('/Test', async function(req, resp){
 });
 
 app.delete('/delete', async function(req, resp){
-    console.log(req.body);
+    //console.log(req.body);
     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
-    console.log("Delete function");
+    //console.log("Delete function");
     try {
         const counter = db.collection(COUNTER);
         const posts = db.collection(POSTS)
@@ -125,8 +125,8 @@ app.delete('/delete', async function(req, resp){
         const stage = { $inc: {totalPost:-1} };
         await counter.updateOne(query, stage);
 
-        console.log('Delete complete')
-        console.log(res)
+        //console.log('Delete complete')
+        //console.log(res)
         resp.send('Delete complete')
     }
     catch (e) {
@@ -136,8 +136,8 @@ app.delete('/delete', async function(req, resp){
 
 app.post('/update', async function(req, resp){
   req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
-  console.log("Update function");
-  console.log(req.body._id);
+  //console.log("Update function");
+  //console.log(req.body._id);
 
   try {
       const posts = db.collection(POSTS);

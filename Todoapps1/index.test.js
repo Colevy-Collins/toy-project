@@ -110,15 +110,18 @@ describe("POST /update", () => {
         it("test if all api that render do so", async () => {
 
             const response =    await request(baseURL).get('/')
+            console.log(response.body.error)
             expect(response.status).toBe(200);
-            expect(response.body.error).toBe(null)
+            expect(response.body.error).toBe(undefined)
 
             const response1 =    await request(baseURL).get('/')
             expect(response1.status).toBe(200);
-            expect(response.body.error).toBe(null)
+            expect(response1.body.error).toBe(undefined)
+            console.log(response.body.error)
 
             const response2 =    await request(baseURL).get('/instruction')
             expect(response2.status).toBe(200);
-            expect(response.body.error).toBe(null)
+            expect(response2.body.error).toBe(undefined)
+            console.log(response.body.error)
         });
       });
