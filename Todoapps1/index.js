@@ -20,7 +20,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (error, client) 
 const express = require('express');
 const app = express();
 const bodyParser= require('body-parser')
-
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})) 
 app.use(express.urlencoded({extended: true})) 
 app.set('view engine', 'ejs');
@@ -53,6 +53,8 @@ app.post('/add', function(req, resp) {
 });
 
 async function runAddPost(req, resp) {
+ console.log("add function");
+ console.log(req.body);
     try {
       const counter = db.collection(COUNTER);
       const posts = db.collection(POSTS);      
@@ -98,8 +100,22 @@ async function runListGet(req, resp) {
     } 
 }
 
+app.get('/Test', async function(req, resp){
+    try {
+      const find = String(req.body.title);
+      const posts = db.collection(POSTS);
+      const res = await posts.findOne({title : find});
+      console.log("listTest function");
+      resp.send(res);
+    } catch (e) {
+      console.error(e);
+    } 
+});
+
 app.delete('/delete', async function(req, resp){
     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+    console.log("Delete function");
+    console.log(req.body._id);
     try {
         const counter = db.collection(COUNTER);
         const posts = db.collection(POSTS)
@@ -119,6 +135,7 @@ app.delete('/delete', async function(req, resp){
 
 app.post('/update', async function(req, resp){
   req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+  console.log("Update function");
   console.log(req.body._id);
 
   try {

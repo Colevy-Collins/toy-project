@@ -39,7 +39,7 @@
             <li class="list-group-item">
                 <h4> Title : <%= posts[i].title %> </h4>
                 <p> Date : <%= posts[i].date %> </p>
-                <p> Date : <%= posts[i]._id %> </p>
+                <p> ID : <%= posts[i]._id %> </p>
                 <input type="button" onclick="document.getElementById('_id').value='<%= posts[i]._id %>' , document.getElementById('date').value='<%= posts[i].date %>' , document.getElementById('title').value='<%= posts[i].title %>'"  value="Update" />
                 <button class="delete" data-id="<%= posts[i]._id %>">Delete</button>
             </li>
@@ -58,7 +58,7 @@
             data : { _id : e.target.dataset.id } 
         }).done((res) => {  // we need this form to use $this 
             $(this).parent('li').fadeOut();
-            console.log('killed')
+            console.log(e.target.dataset.id)
         }).fail((xhr,code,err)=>{
             // failure
         });
