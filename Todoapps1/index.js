@@ -112,6 +112,19 @@ app.get('/Test', async function(req, resp){
     } 
 });
 
+app.get('/Test2', async function(req, resp){
+  try {
+    const find = String(req.body.title);
+    const posts = db.collection(POSTS);
+    const res = await posts.find().toArray();
+    const query = { posts: res };
+    //console.log("listTest function");
+    resp.send(query);
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
 app.delete('/delete', async function(req, resp){
     //console.log(req.body);
     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value

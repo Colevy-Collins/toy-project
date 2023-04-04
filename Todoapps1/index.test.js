@@ -110,18 +110,41 @@ describe("POST /update", () => {
         it("test if all api that render do so", async () => {
 
             const response =    await request(baseURL).get('/')
-            console.log(response.body.error)
+            //console.log(response.body.error)
             expect(response.status).toBe(200);
             expect(response.body.error).toBe(undefined)
 
             const response1 =    await request(baseURL).get('/')
             expect(response1.status).toBe(200);
             expect(response1.body.error).toBe(undefined)
-            console.log(response.body.error)
+            //console.log(response.body.error)
 
             const response2 =    await request(baseURL).get('/instruction')
             expect(response2.status).toBe(200);
             expect(response2.body.error).toBe(undefined)
-            console.log(response.body.error)
+            //console.log(response.body.error)
+
+            await request(baseURL).post(`/add`).send( {title : "render test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
         });
       });
+
+      describe("Get /ID", () => {
+          it("test if all post have IDs", async () => {
+  
+              const response =    await request(baseURL).get('/Test2')
+              for (let i = 0; i < response.body.posts.length; i++){
+                //console.log(response.body.posts[i]);
+                if(response.body.posts[i]._id !== null){
+                    expect(1).toBe(1);
+                    await request(baseURL).post(`/add`).send( {title : "Post ID test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+                } 
+                else {
+                    expect(1).toBe(2);
+                }
+              }
+                
+
+          });
+        });
