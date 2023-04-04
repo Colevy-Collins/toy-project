@@ -32,7 +32,7 @@ app.listen(5500, function() {
 app.get('/', function(req, resp) { 
 
   try {
-    resp.render('write.ejs')
+    resp.status(200).render('write.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -41,7 +41,7 @@ app.get('/', function(req, resp) {
 app.get('/instruction', function(req, resp) { 
 
   try {
-    resp.render('instruction.ejs')
+    resp.status(200).render('instruction.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -94,7 +94,7 @@ async function runListGet(req, resp) {
       const posts = db.collection(POSTS);
       const res = await posts.find().toArray();
       const query = { posts: res };
-      resp.render('list.ejs', query)
+      resp.status(200).render('list.ejs', query)
     } catch (e) {
       console.error(e);
     } 
@@ -113,9 +113,9 @@ app.get('/Test', async function(req, resp){
 });
 
 app.delete('/delete', async function(req, resp){
+    console.log(req.body);
     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
     console.log("Delete function");
-    console.log(req.body._id);
     try {
         const counter = db.collection(COUNTER);
         const posts = db.collection(POSTS)
@@ -126,6 +126,7 @@ app.delete('/delete', async function(req, resp){
         await counter.updateOne(query, stage);
 
         console.log('Delete complete')
+        console.log(res)
         resp.send('Delete complete')
     }
     catch (e) {
