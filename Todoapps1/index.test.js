@@ -134,10 +134,11 @@ describe("POST /update", () => {
   
               const response =    await request(baseURL).get('/Test2')
               for (let i = 0; i < response.body.posts.length; i++){
-                //console.log(response.body.posts[i]);
+                console.log(response.body.posts[i]);
+                //const deleteTest6 =  await request(baseURL).delete(`/delete`).send({ _id: response.body.posts[i]._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
                 if(response.body.posts[i]._id !== null){
                     expect(1).toBe(1);
-                    await request(baseURL).post(`/add`).send( {title : "Post ID test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
 
                 } 
                 else {
@@ -145,6 +146,7 @@ describe("POST /update", () => {
                 }
               }
                 
+              await request(baseURL).post(`/add`).send( {title : "Post ID test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
 
           });
         });
