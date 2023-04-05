@@ -162,7 +162,7 @@ describe("DELETE /clear", () => {
 
         const deleteTest6 =  await request(baseURL).get('/clear');
         const res6 =  await request(baseURL).get(`/Test3`);
-        expect(res6.body).toStrictEqual({});
+        expect(res6.body).toStrictEqual([]);
 
         await request(baseURL).post(`/add`).send( {content : "clear test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         });
@@ -171,32 +171,32 @@ describe("DELETE /clear", () => {
 
 // unit test of update
 
-    // describe("POST /update", () => {
-    //     const newTodo = {
-    //         content : "test0",
-    //         date : "now",
-    //     }
-    //     beforeAll(async () => {
-    //         await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    describe("POST /update", () => {
+        const newTodo = {
+            content : "test0",
+            date : "now",
+        }
+        beforeAll(async () => {
+            await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
     
-    //     })
-    //     afterAll(async () => {
-    //         const res = await request(baseURL).get(`/Test`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    //         expect(res.body.content).toBe("this has been updated");
-    //         await request(baseURL).get(`/delete/` + res.body._id);
-    //         const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    //         expect(res2.body).toStrictEqual({});
+        })
+        afterAll(async () => {
+            const res = await request(baseURL).get(`/Test`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+            expect(res.body.content).toBe("this has been updated");
+            await request(baseURL).get(`/delete/` + res.body._id);
+            const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+            expect(res2.body).toStrictEqual({});
     
-    //         await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    //     })
-    //     it("update the post added to the post database", async () => {
-    //         const res = await request(baseURL).get(`/Test`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    //         expect(res.body.content).toBe(newTodo.content);
-    //         await request(baseURL).post(`/update`).send({_id : res.body._id, content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    //         const res2 =  await request(baseURL).get(`/Test`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    //         expect(res2.body.content).toBe("this has been updated");
-    //     });
-    // });
+            await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        })
+        it("update the post added to the post database", async () => {
+            const res = await request(baseURL).get(`/Test`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+            expect(res.body.content).toBe(newTodo.content);
+            await request(baseURL).post(`/update`).send({_id : res.body._id, content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+            const res2 =  await request(baseURL).get(`/Test`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+            expect(res2.body.content).toBe("this has been updated");
+        });
+    });
 
 
         

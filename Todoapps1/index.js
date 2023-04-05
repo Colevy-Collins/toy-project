@@ -111,17 +111,17 @@ app.get("/edit/:id", async (req, res) => {
 })
 app.post("/update", async (req, res) => {
   const id = req.body._id;
-  //console.log(req.body);
+  console.log(req.body);
 
   if(req.body.date == ""){
     req.body.date = req.body.defDate
   }
 
-  // let isDate = (req.body.date instanceof Date);
+  let isDate = (req.body.date instanceof Date);
 
-  // if(isDate == false){
-  //   req.body.date = req.body.defDate
-  // }
+  if(isDate == false){
+    req.body.date = req.body.defDate
+  }
 
   //console.log(req.body.date);
   try {
@@ -189,7 +189,7 @@ app.get('/Test2', async function(req, res){
   }
 });
 
-app.get("/list", async (req, res) => {
+app.get("/Test3", async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
     res.status(200).send(tasks)
@@ -213,6 +213,17 @@ app.get("/list", async (req, res) => {
         
       });
       //console.log("after for loop")
+
+      const tasks1 = await TodoTask.find({}).sort({_id: 1})
+      //console.log(tasks);
+    
+        //console.log("forloop")
+        tasks1.forEach(async (post) => {
+          
+          await TodoTask.findByIdAndRemove(post.id)
+          
+        });
+        //console.log("after for loop")
       res.redirect("/");
   }
   catch (err) {
