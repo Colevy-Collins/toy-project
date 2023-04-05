@@ -158,7 +158,7 @@ describe("POST /error", () => {
     });
 
 describe("DELETE /clear", () => {
-      it("test the error with adding empty post is caught", async () => {
+      it("test that the clear function clears the db", async () => {
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
@@ -825,7 +825,7 @@ describe("POST /error", () => {
 
 // unit test of clear
 describe("DELETE /clear", () => {
-      it("test if the clear function clease the posts from the db", async () => {
+      it("test that the clear function clears the db", async () => {
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
@@ -843,7 +843,7 @@ describe("DELETE /clear", () => {
         });
     });
 describe("DELETE /clear", () => {
-      it("test if the clear function clease the posts from the db", async () => {
+      it("test that the clear function clears the db", async () => {
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
@@ -861,7 +861,7 @@ describe("DELETE /clear", () => {
         });
     });
 describe("DELETE /clear", () => {
-      it("test if the clear function clease the posts from the db", async () => {
+      it("test that the clear function clears the db", async () => {
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
@@ -879,7 +879,7 @@ describe("DELETE /clear", () => {
         });
     });
 describe("DELETE /clear", () => {
-      it("test if the clear function clease the posts from the db", async () => {
+      it("test that the clear function clears the db", async () => {
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
@@ -897,7 +897,7 @@ describe("DELETE /clear", () => {
         });
     });
 describe("DELETE /clear", () => {
-      it("test if the clear function clease the posts from the db", async () => {
+      it("test that the clear function clears the db", async () => {
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
