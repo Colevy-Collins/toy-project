@@ -44,11 +44,24 @@ app.get('/instruction', function(req, resp) {
   } 
 });
 
+app.get('/error', function(req, resp) { 
+
+  try {
+    resp.status(500).render('error.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
 app.post('/add', async (req, res) => {
   //console.log("add req body.content")
   //console.log(req.body.date);
 
-  if(req.body.date == ""){
+  if(req.body.content == ""){
+
+    res.status(500).redirect("/error");
+
+  } else if(req.body.date == ""){
     const todoTask = new TodoTask({
       content: req.body.content,
     });
@@ -104,6 +117,12 @@ app.post("/update", async (req, res) => {
     req.body.date = req.body.defDate
   }
 
+  // let isDate = (req.body.date instanceof Date);
+
+  // if(isDate == false){
+  //   req.body.date = req.body.defDate
+  // }
+
   //console.log(req.body.date);
   try {
     await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date })
@@ -116,8 +135,8 @@ app.post("/update", async (req, res) => {
 //DELETE
 app.route("/delete/:id").get(async (req, res) => {
   const id = req.params.id;
-  console.log("delete function")
-  console.log(req.params)
+  //console.log("delete function")
+  //console.log(req.params)
   try {
     await TodoTask.findByIdAndRemove(id)
     //console.log("should be deleted")
@@ -130,8 +149,8 @@ app.route("/delete/:id").get(async (req, res) => {
 //Test methods
 app.get('/Test', async function(req, res){
   const id = req.body._id;
-  console.log("req")
-  console.log(req.body);
+  //console.log("req")
+  //console.log(req.body);
 
   if(req.body.date == ""){
     req.body.date = req.body.defDate
@@ -169,3 +188,37 @@ app.get('/Test2', async function(req, res){
     res.send(500, err);
   }
 });
+
+app.get("/list", async (req, res) => {
+  try {
+    const tasks = await TodoTask.find({}).sort({_id: 1})
+    res.status(200).send(tasks)
+  }
+  catch (err) {
+    console.error(err);
+  }
+});
+
+  app.route("/clear").get(async (req, res) => {
+  //console.log("clear function")
+  
+  try {
+    const tasks = await TodoTask.find({}).sort({_id: 1})
+    //console.log(tasks);
+  
+      //console.log("forloop")
+      tasks.forEach(async (post) => {
+        
+        await TodoTask.findByIdAndRemove(post.id)
+        
+      });
+      //console.log("after for loop")
+      res.redirect("/");
+  }
+  catch (err) {
+    console.error(err);
+    res.send(500, err);
+  }
+
+});
+

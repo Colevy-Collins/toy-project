@@ -2,6 +2,7 @@ const request = require("supertest")
 const baseURL = "http://localhost:5500"
 
 
+//regression, integration and acceptance test
 describe("POST /update", () => {
     const newTodo = {
         content : "test0",
@@ -110,35 +111,93 @@ describe("DELETE /delete", () => {
         expect(res6.body).toStrictEqual({});
 
         await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
- 
+        
         });
       });
 
-      describe("Get /render", () => {
-          it("test if all api that render do so", async () => {
-  
-              const response =    await request(baseURL).get('/')
-              //console.log(response.body.error)
-              expect(response.status).toBe(200);
-              expect(response.body.error).toBe(undefined)
-  
-              const response1 =    await request(baseURL).get('/list')
-              expect(response1.status).toBe(200);
-              expect(response1.body.error).toBe(undefined)
-              //console.log(response.body.error)
+describe("GET /render", () => {
+  it("test if all api that render do so", async () => {
 
-              const response2 =    await request(baseURL).get('/edit/:id')
-              expect(response1.status).toBe(200);
-              expect(response1.body.error).toBe(undefined)
-              //console.log(response.body.error)
-  
-              const response3 =    await request(baseURL).get('/instruction')
-              expect(response2.status).toBe(500);
-              expect(response2.body.error).toBe(undefined)
-              //console.log(response.body.error)
-  
-              await request(baseURL).post(`/add`).send( {title : "render test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-  
-          });
+        const response =    await request(baseURL).get('/')
+        //console.log(response.body.error)
+        expect(response.status).toBe(200);
+        expect(response.body.error).toBe(undefined)
+
+        const response1 =    await request(baseURL).get('/list')
+        expect(response1.status).toBe(200);
+        expect(response1.body.error).toBe(undefined)
+        //console.log(response.body.error)
+
+        const response2 =    await request(baseURL).get('/edit/:id')
+        expect(response1.status).toBe(200);
+        expect(response1.body.error).toBe(undefined)
+        //console.log(response.body.error)
+
+        const response3 =    await request(baseURL).get('/instruction')
+        expect(response2.status).toBe(500);
+        expect(response2.body.error).toBe(undefined)
+        //console.log(response.body.error)
+
+        const response4 =    await request(baseURL).get('/error')
+        expect(response2.status).toBe(500);
+        expect(response2.body.error).toBe(undefined)
+        //console.log(response.body.error)
+
+        await request(baseURL).post(`/add`).send( {content : "render test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+    });
+});
+
+describe("POST /error", () => {
+      it("test the error with adding empty post is caught", async () => {
+
+        const response =await request(baseURL).post(`/add`).send().set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(response.status).toBe(500);
+
         });
+    });
+
+describe("DELETE /clear", () => {
+      it("test the error with adding empty post is caught", async () => {
+
+        const deleteTest6 =  await request(baseURL).get('/clear');
+        const res6 =  await request(baseURL).get(`/Test3`);
+        expect(res6.body).toStrictEqual({});
+
+        await request(baseURL).post(`/add`).send( {content : "clear test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        });
+    });
+
+
+// unit test of update
+
+    // describe("POST /update", () => {
+    //     const newTodo = {
+    //         content : "test0",
+    //         date : "now",
+    //     }
+    //     beforeAll(async () => {
+    //         await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    
+    //     })
+    //     afterAll(async () => {
+    //         const res = await request(baseURL).get(`/Test`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    //         expect(res.body.content).toBe("this has been updated");
+    //         await request(baseURL).get(`/delete/` + res.body._id);
+    //         const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    //         expect(res2.body).toStrictEqual({});
+    
+    //         await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    //     })
+    //     it("update the post added to the post database", async () => {
+    //         const res = await request(baseURL).get(`/Test`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    //         expect(res.body.content).toBe(newTodo.content);
+    //         await request(baseURL).post(`/update`).send({_id : res.body._id, content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    //         const res2 =  await request(baseURL).get(`/Test`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    //         expect(res2.body.content).toBe("this has been updated");
+    //     });
+    // });
+
+
+        
   
