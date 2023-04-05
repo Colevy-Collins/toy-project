@@ -301,8 +301,6 @@
 
 <!-- old index.test.js
 
-  const request = require("supertest")
-const baseURL = "http://localhost:5500"
 
 describe("POST /update", () => {
       const newTodo = {
@@ -449,10 +447,7 @@ describe("POST /update", () => {
                 }
               }
                 
-              await request(baseURL).post(`/add`).send( {title : "Post ID test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-
+              
           });
         });
-
-
 -->

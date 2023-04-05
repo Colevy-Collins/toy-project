@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.get("/", async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
-    res.render("write.ejs", { todoTasks: tasks });
+    res.status(200).render("write.ejs", { todoTasks: tasks });
   }
   catch (err) {
     console.error(err);
@@ -38,7 +38,7 @@ app.get("/", async (req, res) => {
 app.get('/instruction', function(req, resp) { 
 
   try {
-    resp.status(200).render('instruction.ejs')
+    resp.status(500).render('instruction.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -54,7 +54,7 @@ app.post('/add', async (req, res) => {
     });
     try {
       await todoTask.save();
-      res.redirect("/");
+      res.status(302).redirect("/");
     } catch (err) {
       res.send(500, err);
     }
@@ -77,7 +77,7 @@ app.post('/add', async (req, res) => {
 app.get("/list", async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
-    res.render("list.ejs", { todoTasks: tasks });
+    res.status(200).render("list.ejs", { todoTasks: tasks });
   }
   catch (err) {
     console.error(err);
@@ -87,24 +87,24 @@ app.get("/list", async (req, res) => {
 
 //UPDATE
 app.get("/edit/:id", async (req, res) => {
-  console.log(req.params.id);
+  //console.log(req.params.id);
   const id = req.params.id;
   try {
     const tasks = await TodoTask.findByIdAndUpdate(id, { content: req.body.content })
-    res.render("update.ejs", { todoTasks: tasks});
+    res.status(200).render("update.ejs", { todoTasks: tasks});
   } catch (err) {
     res.send(500, err);
   }
 })
 app.post("/update", async (req, res) => {
   const id = req.body._id;
-  console.log(req.body);
+  //console.log(req.body);
 
   if(req.body.date == ""){
     req.body.date = req.body.defDate
   }
 
-  console.log(req.body.date);
+  //console.log(req.body.date);
   try {
     await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date })
     res.redirect("/");
@@ -117,10 +117,54 @@ app.post("/update", async (req, res) => {
 app.route("/delete/:id").get(async (req, res) => {
   const id = req.params.id;
   console.log("delete function")
-  console.log(req.params.id)
+  console.log(req.params)
   try {
     await TodoTask.findByIdAndRemove(id)
+    //console.log("should be deleted")
     res.redirect("/");
+  } catch (err) {
+    res.send(500, err);
+  }
+});
+
+//Test methods
+app.get('/Test', async function(req, res){
+  const id = req.body._id;
+  console.log("req")
+  console.log(req.body);
+
+  if(req.body.date == ""){
+    req.body.date = req.body.defDate
+  }
+  //console.log("defDate")
+  //console.log(req.body.date);
+  try {
+    const response = await TodoTask.findOne({ content: req.body.content})
+    //console.log("response")
+    //console.log(response);
+    res.send(response);
+  } catch (err) {
+    res.send(500, err);
+  }
+});
+
+//Test methods
+app.get('/Test2', async function(req, res){
+  const id = req.body._id;
+  //console.log("req")
+  //console.log(req.body);
+
+  if(req.body.date == ""){
+    req.body.date = req.body.defDate
+  }
+  //console.log("defDate")
+  //console.log(req.body.date);
+  try {
+    const response = await TodoTask.exists({ content: req.body.content})
+    console.log(response);
+    //console.log("response")
+    //console.log(response.body);
+    res.send(response);
   } catch (err) {
     res.send(500, err);
   }
