@@ -1,41 +1,38 @@
-// run "npm install . "
-// reset counter/totalPost to 0
-// remove all the documents in the posts
 
-const {MongoClient} = require('mongodb');
-
-const uri = require('./db.js');
-var db;
-
-const DATABASE = 'todoapp'; 
-const POSTS = 'posts';
-const COUNTER = 'counter';
-
-MongoClient.connect(uri, { useUnifiedTopology: true }, function (error, client) {
-    if (error) return console.log(error)
-    db = client.db(DATABASE);
-});
-
-// Install express
-const express = require('express');
+const mongoose = require("mongoose");
+const express = require("express");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
+
+const TodoTask = require("./models/TodoTask");
+
+main().catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect(process.env.DB_CONNECT);
+  console.log("Connected to db!");
+  app.listen(5500, () => console.log("Server Up and running"));
+}
+
+app.set("view engine", "ejs");
+app.use("/static", express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+
 const bodyParser= require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})) 
-app.use(express.urlencoded({extended: true})) 
-app.set('view engine', 'ejs');
 
-app.listen(5500, function() {
-    console.log('listening on 5500')
-});
+// CRUD processing
 
-app.get('/', function(req, resp) { 
-
+app.get("/", async (req, res) => {
   try {
-    resp.status(200).render('write.ejs')
-  } catch (e) {
-    console.error(e);
-  } 
+    const tasks = await TodoTask.find({}).sort({_id: 1})
+    res.render("write.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err);
+  }
 });
 
 app.get('/instruction', function(req, resp) { 
@@ -47,123 +44,84 @@ app.get('/instruction', function(req, resp) {
   } 
 });
 
+app.post('/add', async (req, res) => {
+  //console.log("add req body.content")
+  //console.log(req.body.date);
 
-app.post('/add', function(req, resp) {
-    runAddPost(req, resp);
-});
-
-async function runAddPost(req, resp) {
- //console.log("add function");
- //console.log(req.body);
+  if(req.body.date == ""){
+    const todoTask = new TodoTask({
+      content: req.body.content,
+    });
     try {
-      const counter = db.collection(COUNTER);
-      const posts = db.collection(POSTS);      
-  
-      let query = {name : 'Total Post'};
-      let res = await counter.findOne(query);
-      //console.log(res);
-      const totalPost = res.totalPost;
-      try{
-        let newPost = await posts.findOne({}, {sort:{$natural:-1}})
-        var newID = newPost._id;
-      }
-      catch (e){
-        var newID = 0;
-      }
-
-      query = { _id : newID + 1, title : req.body.title, date : req.body.date};
-      res = await posts.insertOne(query);
-      
-      query = {name : 'Total Post'};
-      let stage = { $inc: {totalPost:1} };
-      await counter.updateOne(query, stage);
-      resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/"><div style="border:1px solid black;"><h2 style="">Return Home</h2></div></a>');
-      //resp.send('Stored to MongoDB OK');
-    } catch (e) {
-      console.error(e);
+      await todoTask.save();
+      res.redirect("/");
+    } catch (err) {
+      res.send(500, err);
     }
-}
+  }
+  else{
+    const todoTask = new TodoTask({
+      content: req.body.content,
+      date : req.body.date
+    });
 
-
-app.get('/list', function(req, resp){
-  runListGet(req, resp);
+    try {
+      await todoTask.save();
+      res.redirect("/");
+    } catch (err) {
+      res.send(500, err);
+    }
+ }
 });
 
-async function runListGet(req, resp) {
-    try {
-      const posts = db.collection(POSTS);
-      const res = await posts.find().toArray();
-      const query = { posts: res };
-      resp.status(200).render('list.ejs', query)
-    } catch (e) {
-      console.error(e);
-    } 
-}
-
-app.get('/Test', async function(req, resp){
-    try {
-      const find = String(req.body.title);
-      const posts = db.collection(POSTS);
-      const res = await posts.findOne({title : find});
-      //console.log("listTest function");
-      resp.send(res);
-    } catch (e) {
-      console.error(e);
-    } 
-});
-
-app.get('/Test2', async function(req, resp){
+app.get("/list", async (req, res) => {
   try {
-    const find = String(req.body.title);
-    const posts = db.collection(POSTS);
-    const res = await posts.find().toArray();
-    const query = { posts: res };
-    //console.log("listTest function");
-    resp.send(query);
-  } catch (e) {
-    console.error(e);
-  } 
+    const tasks = await TodoTask.find({}).sort({_id: 1})
+    res.render("list.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err);
+  }
 });
 
-app.delete('/delete', async function(req, resp){
-    //console.log(req.body);
-    req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
-    //console.log("Delete function");
-    try {
-        const counter = db.collection(COUNTER);
-        const posts = db.collection(POSTS)
-        const res = await posts.deleteOne(req.body); 
 
-        const query = {name : 'Total Post'};
-        const stage = { $inc: {totalPost:-1} };
-        await counter.updateOne(query, stage);
-
-        //console.log('Delete complete')
-        //console.log(res)
-        resp.send('Delete complete')
-    }
-    catch (e) {
-        console.error(e);
-    }
-}); 
-
-app.post('/update', async function(req, resp){
-  req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
-  //console.log("Update function");
-  //console.log(req.body._id);
-
+//UPDATE
+app.get("/edit/:id", async (req, res) => {
+  console.log(req.params.id);
+  const id = req.params.id;
   try {
-      const posts = db.collection(POSTS);
+    const tasks = await TodoTask.findByIdAndUpdate(id, { content: req.body.content })
+    res.render("update.ejs", { todoTasks: tasks});
+  } catch (err) {
+    res.send(500, err);
+  }
+})
+app.post("/update", async (req, res) => {
+  const id = req.body._id;
+  console.log(req.body);
 
-      const query = {_id : req.body._id};
-      const stage = { $set: {title : req.body.title, date : req.body.date}};
-      await posts.updateOne(query, stage);
-      //resp.send('Stored to Mongodb OK');
-      resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/list"><div style="border:1px solid black;"><h2 style="">Return to list</h2></div></a>');
+  if(req.body.date == ""){
+    req.body.date = req.body.defDate
+  }
 
-      console.log('Stored to Mongodb OK');
-    } catch (e) {
-      console.error(e);
-    }
+  console.log(req.body.date);
+  try {
+    await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date })
+    res.redirect("/");
+  } catch (err) {
+    res.send(500, err);
+  }
+});
 
+//DELETE
+app.route("/delete/:id").get(async (req, res) => {
+  const id = req.params.id;
+  console.log("delete function")
+  console.log(req.params.id)
+  try {
+    await TodoTask.findByIdAndRemove(id)
+    res.redirect("/");
+  } catch (err) {
+    res.send(500, err);
+  }
 });
