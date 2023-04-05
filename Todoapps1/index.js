@@ -111,15 +111,10 @@ app.get("/edit/:id", async (req, res) => {
 })
 app.post("/update", async (req, res) => {
   const id = req.body._id;
-  console.log(req.body);
+  console.log("")
+  console.log(req.body.date);
 
   if(req.body.date == ""){
-    req.body.date = req.body.defDate
-  }
-
-  let isDate = (req.body.date instanceof Date);
-
-  if(isDate == false){
     req.body.date = req.body.defDate
   }
 
