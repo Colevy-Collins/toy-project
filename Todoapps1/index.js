@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const TodoTask = require("./models/TodoTask");
+const User = require("./models/userTask");
 
 main().catch(err => console.log(err));
 
@@ -48,6 +49,15 @@ app.get('/error', function(req, resp) {
 
   try {
     resp.status(500).render('error.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
+app.get('/register', function(req, resp) { 
+
+  try {
+    resp.status(500).render('register.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -139,6 +149,63 @@ app.route("/delete/:id").get(async (req, res) => {
   } catch (err) {
     res.send(500, err);
   }
+});
+
+//REGISTER
+app.post('/create', async (req, res) =>{
+  
+    const { username, email, password, password2 } = req.body;
+    let errors = [];
+    let accSuccess = [];
+    try{
+    // Check if user exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+
+    if (existingUser) {
+      errors.push({msg: 'User already exists' });
+    }
+  }
+  catch(err){
+
+  }
+
+    if (!username || !email || !password || !password2) {
+      errors.push({ msg: 'Please fill in all fields' });
+  }
+  // Check password
+  if (password !== password2) {
+      errors.push({ msg: 'Passwords do not match' });
+  }
+  // Check password length
+  if (password.length < 6) {
+      errors.push({ msg: 'Password should be at least 6 characters' });
+  }
+  if (errors.length > 0) {
+      res.render('register', {
+          errors,
+          username,
+          email,
+          password,
+          password2
+      });
+  }
+  else {
+
+    const newUser = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    });
+    try {
+      await newUser.save();
+    } catch (err) {
+      res.send(500, err);
+    }
+  }
+      accSuccess.push({msg: 'Account successfully created'});
+      res.render('register', {
+        accSuccess
+    });
 });
 
 //Test methods
