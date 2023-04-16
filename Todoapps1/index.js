@@ -1,8 +1,9 @@
-
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
+const { v4: uuidv4 } = require('uuid');
+const session = require('express-session');
 dotenv.config();
 
 const TodoTask = require("./models/TodoTask");
@@ -23,10 +24,15 @@ app.use(express.urlencoded({ extended: true }));
 const bodyParser= require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true})) 
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false
+}));
 
 // CRUD processing
 
-app.get("/", async (req, res) => {
+app.get("/", requireLogin, async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
     res.status(200).render("write.ejs", { todoTasks: tasks });
@@ -36,7 +42,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get('/instruction', function(req, resp) { 
+app.get('/instruction', requireLogin, function(req, resp) { 
 
   try {
     resp.status(500).render('instruction.ejs')
@@ -63,7 +69,26 @@ app.get('/register', function(req, resp) {
   } 
 });
 
-app.post('/add', async (req, res) => {
+app.get('/login', function(req, resp) { 
+
+  try {
+    resp.status(500).render('login.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
+app.get('/account', requireLogin, function(req, res) {
+  User.findOne({ userID: req.session.userId })
+    .then(user => {
+      res.render('account', { user });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+app.post('/add', requireLogin, async (req, res) => {
   //console.log("add req body.content")
   //console.log(req.body.date);
 
@@ -97,7 +122,7 @@ app.post('/add', async (req, res) => {
  }
 });
 
-app.get("/list", async (req, res) => {
+app.get("/list", requireLogin, async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
     res.status(200).render("list.ejs", { todoTasks: tasks });
@@ -109,7 +134,7 @@ app.get("/list", async (req, res) => {
 
 
 //UPDATE
-app.get("/edit/:id", async (req, res) => {
+app.get("/edit/:id", requireLogin, async (req, res) => {
   //console.log(req.params.id);
   const id = req.params.id;
   try {
@@ -119,7 +144,7 @@ app.get("/edit/:id", async (req, res) => {
     res.send(500, err);
   }
 })
-app.post("/update", async (req, res) => {
+app.post("/update", requireLogin, async (req, res) => {
   const id = req.body._id;
   console.log("")
   console.log(req.body.date);
@@ -138,7 +163,7 @@ app.post("/update", async (req, res) => {
 });
 
 //DELETE
-app.route("/delete/:id").get(async (req, res) => {
+app.route("/delete/:id", requireLogin,).get(async (req, res) => {
   const id = req.params.id;
   //console.log("delete function")
   //console.log(req.params)
@@ -190,8 +215,10 @@ app.post('/create', async (req, res) =>{
       });
   }
   else {
-
+    
+    const userID = uuidv4();
     const newUser = new User({
+      userID,
       username: req.body.username,
       email: req.body.email,
       password: req.body.password
@@ -207,6 +234,48 @@ app.post('/create', async (req, res) =>{
         accSuccess
     });
 });
+
+//LOGIN
+app.post('/logging', async (req, res) => {
+  const { username, password } = req.body;
+  let errors = [];
+  try {
+    // Check if user exists
+    const user = await User.findOne({ username });
+    if (!user) {
+      errors.push({ msg: 'Invalid username or password' });
+    } else {
+      let isMatch = false;
+      // Check password
+    if(password == user.password){
+      isMatch = true;
+    }
+      if (!isMatch) {
+        errors.push({ msg: 'Invalid username or password' });
+      } else {
+        // Create session
+        req.session.userId = user.userID;
+        // Redirect to home page
+        res.redirect('/');
+        return;
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    errors.push({ msg: 'An error occurred, please try again later' });
+  }
+  res.render('login', { errors });
+});
+
+function requireLogin(req, res, next) {
+  if (req.session.userId) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
+
+
 
 //Test methods
 app.get('/Test', async function(req, res){
