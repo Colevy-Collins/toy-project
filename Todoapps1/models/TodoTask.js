@@ -8,6 +8,9 @@ const todoTaskSchema = new mongoose.Schema({
     type: String,
     default: new Date().toISOString().slice(0, 10)
   },
+  dateNum: {
+    type : Date
+  },
   tag: {
     type: String,
     defualt: "Standard Task"

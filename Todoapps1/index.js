@@ -71,8 +71,29 @@ app.get('/advSearch', function(req, resp) {
   } 
 });
 
+app.get('/search', function(req, resp) { 
+
+  try {
+    resp.status(500).render('search.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
+app.get("/list", async (req, res) => {
+  try {
+    const tasks = await TodoTask.find({}).sort({_id: 1})
+    //console.log(tasks)
+    res.status(200).render("list.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err);
+  }
+ });
+
+//create
 app.post('/add', async (req, res) => {
-  //console.log("add req body.content")
+ //console.log("add req body.content")
  //console.log(req.body.date);
 
  if(req.body.content == ""){
@@ -84,6 +105,7 @@ app.post('/add', async (req, res) => {
  if(req.body.date == "" && req.body.tag ==""){
    const todoTask = new TodoTask({
      content: req.body.content,
+     dateNum: new Date().toISOString().slice(0, 10)
  });
    try {
      await todoTask.save();
@@ -93,10 +115,11 @@ app.post('/add', async (req, res) => {
    }
  }
 
- if(req.body.date == ""){
+ if(req.body.date == "" && req.body.content != ""){
    const todoTask = new TodoTask({
      content: req.body.content,
-     tag: req.body.tag
+     tag: req.body.tag,
+     dateNum: new Date().toISOString().slice(0, 10)
  });
    try {
      await todoTask.save();
@@ -109,8 +132,10 @@ app.post('/add', async (req, res) => {
  if(req.body.tag == ""){
    const todoTask = new TodoTask({
      content: req.body.content,
-     tag: req.body.date
+     date: req.body.date,
+     dateNum : req.body.date
  });
+ //console.log(todoTask.dateNum)
    try {
      await todoTask.save();
      res.status(302).redirect("/");
@@ -123,9 +148,10 @@ app.post('/add', async (req, res) => {
    const todoTask = new TodoTask({
      content: req.body.content,
      date : req.body.date,
-     tag : req.body.tag
+     tag : req.body.tag,
+     dateNum : req.body.date
    });
-
+   //console.log(todoTask.dateNum)
    try {
      await todoTask.save();
      res.redirect("/");
@@ -134,27 +160,6 @@ app.post('/add', async (req, res) => {
    }
 }
 });
-
-app.get("/list", async (req, res) => {
- try {
-   const tasks = await TodoTask.find({}).sort({_id: 1})
-   res.status(200).render("list.ejs", { todoTasks: tasks });
- }
- catch (err) {
-   console.error(err);
- }
-});
-
-app.get("/list", async (req, res) => {
-  try {
-    const tasks = await TodoTask.find({}).sort({_id: 1})
-    res.status(200).render("list.ejs", { todoTasks: tasks });
-  }
-  catch (err) {
-    console.error(err);
-  }
-});
-
 
 //UPDATE
 app.get("/edit/:id", async (req, res) => {
@@ -169,8 +174,8 @@ app.get("/edit/:id", async (req, res) => {
 })
 app.post("/update", async (req, res) => {
   const id = req.body._id;
-  console.log("")
-  console.log(req.body.date);
+  //console.log("")
+  //console.log(req.body.date);
 
   if(req.body.date == ""){
     req.body.date = req.body.defDate
@@ -178,8 +183,8 @@ app.post("/update", async (req, res) => {
 
   //console.log(req.body.date);
   try {
-    await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date })
-    res.redirect("/");
+    await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date, dateNum: req.body.date, tag: req.body.tag })
+    res.redirect("/list");
   } catch (err) {
     res.send(500, err);
   }
@@ -193,7 +198,7 @@ app.route("/delete/:id").get(async (req, res) => {
   try {
     await TodoTask.findByIdAndRemove(id)
     //console.log("should be deleted")
-    res.redirect("/");
+    res.redirect("/list");
   } catch (err) {
     res.send(500, err);
   }
@@ -214,8 +219,8 @@ app.post("/tag", async (req, res) => {
 
 //adv search
 app.post("/advSearch", async (req, res) => {
-  console.log("tag function");
-  console.log(req.body.date)
+  //console.log("adv search function");
+  //console.log(req.body.date)
 
   if(req.body.content == "" && req.body.date == ""){
 
@@ -265,6 +270,30 @@ app.post("/advSearch", async (req, res) => {
  }
 });
 
+//Search 
+app.post("/search", async (req, res) => {
+  //console.log("search function");
+  //console.log(req.body.date)
+
+  if(req.body.date1 == "" || req.body.date2 == ""){
+    res.status(500).redirect("/error");
+  }
+  
+  if(req.body.date1 != "" && req.body.date2 != "") {
+ 
+    try {
+      console.log(req.body.date1)
+      console.log(req.body.date2)
+      const tasks = await TodoTask.find({dateNum: {"$gte": req.body.date1, "$lte": req.body.date2}}).sort({_id: 1})
+      //console.log(tasks)
+      res.status(200).render("list.ejs", { todoTasks: tasks });
+    }
+    catch (err) {
+      console.error(err); 
+    }
+ }
+});
+
 //Test methods
 app.get('/Test', async function(req, res){
   const id = req.body._id;
@@ -277,7 +306,7 @@ app.get('/Test', async function(req, res){
   //console.log("defDate")
   //console.log(req.body.date);
   try {
-    const response = await TodoTask.findOne({ content: req.body.content})
+    const response = await TodoTask.findOne({content: req.body.content})
     //console.log("response")
     //console.log(response);
     res.send(response);
