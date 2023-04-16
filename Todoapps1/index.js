@@ -62,6 +62,15 @@ app.get('/tagSearch', function(req, resp) {
   } 
 });
 
+app.get('/advSearch', function(req, resp) { 
+
+  try {
+    resp.status(500).render('advSearch.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
 app.post('/add', async (req, res) => {
   //console.log("add req body.content")
  //console.log(req.body.date);
@@ -192,15 +201,68 @@ app.route("/delete/:id").get(async (req, res) => {
 
 //Tag search
 app.post("/tag", async (req, res) => {
-  console.log("tag function");
-  console.log(req.body)
+  //console.log("tag function");
+  //console.log(req.body)
   try {
     const tasks = await TodoTask.find({tag: req.body.tag}).sort({_id: 1})
     res.status(200).render("list.ejs", { todoTasks: tasks });
   }
   catch (err) {
-    console.error(err);
+    console.error(err); 
   }
+});
+
+//adv search
+app.post("/advSearch", async (req, res) => {
+  console.log("tag function");
+  console.log(req.body.date)
+
+  if(req.body.content == "" && req.body.date == ""){
+
+    res.status(500).redirect("/error");
+ 
+  }
+
+  if(req.body.content == ""){
+    const todoTask = new TodoTask({
+      date: req.body.date,
+  });
+  try {
+    const tasks = await TodoTask.find({date: new RegExp(req.body.date, 'i')}).sort({_id: 1})
+    res.status(200).render("list.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err); 
+  }
+  }
+
+  if(req.body.date == ""){
+    const todoTask = new TodoTask({
+      content: req.body.content,
+  });
+  try {
+    const tasks = await TodoTask.find({content: new RegExp(req.body.content, 'i')}).sort({_id: 1})
+    res.status(200).render("list.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err); 
+  }
+  }
+  
+  if(req.body.date != "" && req.body.content !="") {
+    const todoTask = new TodoTask({
+      content: req.body.content,
+      date : req.body.date,
+    });
+ 
+    try {
+      const tasks = await TodoTask.find({content: new RegExp(req.body.content, 'i'), date: new RegExp(newreq.body.date, 'i')}).sort({_id: 1})
+      res.status(200).render("list.ejs", { todoTasks: tasks });
+    }
+    catch (err) {
+      console.error(err); 
+    }
+ }
 });
 
 //Test methods
