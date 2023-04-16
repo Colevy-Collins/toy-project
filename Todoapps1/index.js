@@ -51,7 +51,7 @@ app.get('/instruction', requireLogin, function(req, resp) {
   } 
 });
 
-app.get('/error', function(req, resp) { 
+app.get('/error', requireLogin, function(req, resp) { 
 
   try {
     resp.status(500).render('error.ejs')
