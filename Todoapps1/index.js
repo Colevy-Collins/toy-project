@@ -53,37 +53,86 @@ app.get('/error', function(req, resp) {
   } 
 });
 
+app.get('/tagSearch', function(req, resp) { 
+
+  try {
+    resp.status(500).render('tagSearch.ejs')
+  } catch (e) {
+    console.error(e);
+  } 
+});
+
 app.post('/add', async (req, res) => {
   //console.log("add req body.content")
-  //console.log(req.body.date);
+ //console.log(req.body.date);
 
-  if(req.body.content == ""){
+ if(req.body.content == ""){
 
-    res.status(500).redirect("/error");
+   res.status(500).redirect("/error");
 
-  } else if(req.body.date == ""){
-    const todoTask = new TodoTask({
-      content: req.body.content,
-    });
-    try {
-      await todoTask.save();
-      res.status(302).redirect("/");
-    } catch (err) {
-      res.send(500, err);
-    }
-  }
-  else{
-    const todoTask = new TodoTask({
-      content: req.body.content,
-      date : req.body.date
-    });
+ }
+ 
+ if(req.body.date == "" && req.body.tag ==""){
+   const todoTask = new TodoTask({
+     content: req.body.content,
+ });
+   try {
+     await todoTask.save();
+     res.status(302).redirect("/");
+   } catch (err) {
+     res.send(500, err);
+   }
+ }
 
-    try {
-      await todoTask.save();
-      res.redirect("/");
-    } catch (err) {
-      res.send(500, err);
-    }
+ if(req.body.date == ""){
+   const todoTask = new TodoTask({
+     content: req.body.content,
+     tag: req.body.tag
+ });
+   try {
+     await todoTask.save();
+     res.status(302).redirect("/");
+   } catch (err) {
+     res.send(500, err);
+   }
+ }
+
+ if(req.body.tag == ""){
+   const todoTask = new TodoTask({
+     content: req.body.content,
+     tag: req.body.date
+ });
+   try {
+     await todoTask.save();
+     res.status(302).redirect("/");
+   } catch (err) {
+     res.send(500, err);
+   }
+ }
+ 
+ if(req.body.date != "" && req.body.tag !="" && req.body.content !="") {
+   const todoTask = new TodoTask({
+     content: req.body.content,
+     date : req.body.date,
+     tag : req.body.tag
+   });
+
+   try {
+     await todoTask.save();
+     res.redirect("/");
+   } catch (err) {
+     res.send(500, err);
+   }
+}
+});
+
+app.get("/list", async (req, res) => {
+ try {
+   const tasks = await TodoTask.find({}).sort({_id: 1})
+   res.status(200).render("list.ejs", { todoTasks: tasks });
+ }
+ catch (err) {
+   console.error(err);
  }
 });
 
@@ -138,6 +187,19 @@ app.route("/delete/:id").get(async (req, res) => {
     res.redirect("/");
   } catch (err) {
     res.send(500, err);
+  }
+});
+
+//Tag search
+app.post("/tag", async (req, res) => {
+  console.log("tag function");
+  console.log(req.body)
+  try {
+    const tasks = await TodoTask.find({tag: req.body.tag}).sort({_id: 1})
+    res.status(200).render("list.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err);
   }
 });
 

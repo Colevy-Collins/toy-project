@@ -7,6 +7,10 @@ const todoTaskSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  tag: {
+    type: String,
+    defualt: "Standard Task"
   }
 },
 {
