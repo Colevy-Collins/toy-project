@@ -1,0 +1,453 @@
+<!--old write.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+  <title>Document</title>
+</head>
+
+<body>
+  <%- include('nav.ejs') %>
+
+  <h4 class="container mt-4"><strong>Write Page</strong></h4>
+
+  <div class="container mt-3">
+    <form action="/add" method="POST">
+      <div class="form-group">
+        <label>What to do today</label>
+        <input type="text" class="form-control" name="title"/>
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="text" class="form-control" name="date"/>
+      </div>
+      <button type="submit" class="btn btn-outline-secondary">Submit</button>
+    </form>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+<!--old list.ejs-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+  <title>Document</title>
+</head>
+
+<body>
+  <%- include('nav.ejs') %>
+  
+  <div class="container mt-3">
+    <form action="/update" method="POST">
+      <div class="form-group">
+        <label>What to do today</label>
+        <input type="text" class="form-control" name="title" id="title"/>
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="text" class="form-control" name="date" id="date"/>
+      </div>
+      <div class="form-group">
+        <label>ID</label>
+        <input type="text" class="form-control" name="_id" id="_id"/>
+      </div>
+      <button type="submit" class="btn btn-outline-secondary">Submit</button>
+    </form>
+  </div>
+
+  <ul class="list-group">
+      <% for (var i = 0; i < posts.length; i++){ %>
+            <li class="list-group-item">
+                <h4> Title : <%= posts[i].title %> </h4>
+                <p> Date : <%= posts[i].date %> </p>
+                <p> ID : <%= posts[i]._id %> </p>
+                <input type="button" onclick="document.getElementById('_id').value='<%= posts[i]._id %>' , document.getElementById('date').value='<%= posts[i].date %>' , document.getElementById('title').value='<%= posts[i].title %>'"  value="Update" />
+                <button class="delete" data-id="<%= posts[i]._id %>">Delete</button>
+            </li>
+        <% } %>
+  </ul> 
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script>
+    $('.delete').click(function(e){
+        $.ajax({
+            method : 'DELETE',
+            url : '/delete',
+            // dataset.id is from: data-id= posts[i]._id 
+            data : { _id : e.target.dataset.id } 
+        }).done((res) => {  // we need this form to use $this 
+            $(this).parent('li').fadeOut();
+            console.log(e.target.dataset.id)
+        }).fail((xhr,code,err)=>{
+            // failure
+        });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
+
+<!-- old index.js-->
+<!--
+// // run "npm install . "
+// // reset counter/totalPost to 0
+// // remove all the documents in the posts
+
+// const {MongoClient} = require('mongodb');
+
+// const uri = require('./db.js');
+// var db;
+
+// const DATABASE = 'todoapp'; 
+// const POSTS = 'posts';
+// const COUNTER = 'counter';
+
+// MongoClient.connect(uri, { useUnifiedTopology: true }, function (error, client) {
+//     if (error) return console.log(error)
+//     db = client.db(DATABASE);
+// });
+
+// // Install express
+// const express = require('express');
+// const app = express();
+// const bodyParser= require('body-parser')
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: true})) 
+// app.use(express.urlencoded({extended: true})) 
+// app.set('view engine', 'ejs');
+
+// app.listen(5500, function() {
+//     console.log('listening on 5500')
+// });
+
+// app.get('/', function(req, resp) { 
+
+//   try {
+//     resp.status(200).render('write.ejs')
+//   } catch (e) {
+//     console.error(e);
+//   } 
+// });
+
+// app.get('/instruction', function(req, resp) { 
+
+//   try {
+//     resp.status(200).render('instruction.ejs')
+//   } catch (e) {
+//     console.error(e);
+//   } 
+// });
+
+
+// app.post('/add', function(req, resp) {
+//     runAddPost(req, resp);
+// });
+
+// async function runAddPost(req, resp) {
+//  //console.log("add function");
+//  //console.log(req.body);
+//     try {
+//       const counter = db.collection(COUNTER);
+//       const posts = db.collection(POSTS);      
+  
+//       let query = {name : 'Total Post'};
+//       let res = await counter.findOne(query);
+//       //console.log(res);
+//       const totalPost = res.totalPost;
+//       try{
+//         let newPost = await posts.findOne({}, {sort:{$natural:-1}})
+//         var newID = newPost._id;
+//       }
+//       catch (e){
+//         var newID = 0;
+//       }
+
+//       query = { _id : newID + 1, title : req.body.title, date : req.body.date};
+//       res = await posts.insertOne(query);
+      
+//       query = {name : 'Total Post'};
+//       let stage = { $inc: {totalPost:1} };
+//       await counter.updateOne(query, stage);
+//       resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/"><div style="border:1px solid black;"><h2 style="">Return Home</h2></div></a>');
+//       //resp.send('Stored to MongoDB OK');
+//     } catch (e) {
+//       console.error(e);
+//     }
+// }
+
+
+// app.get('/list', function(req, resp){
+//   runListGet(req, resp);
+// });
+
+// async function runListGet(req, resp) {
+//     try {
+//       const posts = db.collection(POSTS);
+//       const res = await posts.find().toArray();
+//       const query = { posts: res };
+//       resp.status(200).render('list.ejs', query)
+//     } catch (e) {
+//       console.error(e);
+//     } 
+// }
+
+// app.get('/Test', async function(req, resp){
+//     try {
+//       const find = String(req.body.title);
+//       const posts = db.collection(POSTS);
+//       const res = await posts.findOne({title : find});
+//       //console.log("listTest function");
+//       resp.send(res);
+//     } catch (e) {
+//       console.error(e);
+//     } 
+// });
+
+// app.get('/Test2', async function(req, resp){
+//   try {
+//     const find = String(req.body.title);
+//     const posts = db.collection(POSTS);
+//     const res = await posts.find().toArray();
+//     const query = { posts: res };
+//     //console.log("listTest function");
+//     resp.send(query);
+//   } catch (e) {
+//     console.error(e);
+//   } 
+// });
+
+// app.delete('/delete', async function(req, resp){
+//     //console.log(req.body);
+//     req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+//     //console.log("Delete function");
+//     try {
+//         const counter = db.collection(COUNTER);
+//         const posts = db.collection(POSTS)
+//         const res = await posts.deleteOne(req.body); 
+
+//         const query = {name : 'Total Post'};
+//         const stage = { $inc: {totalPost:-1} };
+//         await counter.updateOne(query, stage);
+
+//         //console.log('Delete complete')
+//         //console.log(res)
+//         resp.send('Delete complete')
+//     }
+//     catch (e) {
+//         console.error(e);
+//     }
+// }); 
+
+// app.post('/update', async function(req, resp){
+//   req.body._id = parseInt(req.body._id); // the body._id is stored in string, so change it into an int value
+//   //console.log("Update function");
+//   //console.log(req.body._id);
+
+//   try {
+//       const posts = db.collection(POSTS);
+
+//       const query = {_id : req.body._id};
+//       const stage = { $set: {title : req.body.title, date : req.body.date}};
+//       await posts.updateOne(query, stage);
+//       //resp.send('Stored to Mongodb OK');
+//       resp.send('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/list"><div style="border:1px solid black;"><h2 style="">Return to list</h2></div></a>');
+
+//       console.log('Stored to Mongodb OK');
+//     } catch (e) {
+//       console.error(e);
+//     }
+
+// });
+-->
+
+<!-- old index.test.js
+
+
+describe("POST /update", () => {
+      const newTodo = {
+        title : "test1",
+        date : "now",
+      }
+        
+    beforeAll(async () => {
+        await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    })
+    afterAll(async () => {
+        const query2 =   await request(baseURL).get('/Test').send({title : "test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        //console.log(query2.body);
+        const deleteTest = await request(baseURL).delete(`/delete`).send({ _id: query2.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest.text).toBe('Delete complete');
+        await request(baseURL).post(`/add`).send( {title : "update test finshed successful", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    })
+      it("update the post added to the post database", async () => {
+        const query =  await request(baseURL).get('/Test').send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        //console.log(query.body);
+        const response = await request(baseURL).post("/update").send({_id : query.body._id, title : "test complete", date : "done"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(response.text).toBe('<h1 style="text-align:center">Stored to MongoDB</h1><br/><a style="text-decoration:none; color:black;  text-align:center" href="/list"><div style="border:1px solid black;"><h2 style="">Return to list</h2></div></a>');
+        //console.log(query.body);
+        const query2 =   await request(baseURL).get('/Test').send({title : "test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        //console.log(query2.body);
+        //console.log(query.body);
+        expect(query2.body).toStrictEqual({_id : query.body._id, title : "test complete", date : "done"});
+      });
+    });
+
+
+    describe("DELETE /delete", () => {
+    const newTodo = {
+        title : "test0",
+        date : "now",
+    }
+    const newTodo1 = {
+        title : "test1",
+        date : "now",
+    }
+    const newTodo2 = {
+        title : "test2",
+        date : "now",
+      }
+    const newTodo3 = {
+        title : "test3",
+        date : "now",
+      }
+    const newTodo4 = {
+        title : "test4",
+        date : "now",
+      }
+    const newTodo5 = {
+        title : "test5",
+        date : "now",
+      }
+    const newTodo6 = {
+        title : "test6",
+        date : "now",
+      }
+          
+      beforeAll(async () => {
+        await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/add`).send(newTodo1).set('Content-Type', 'application/json').set('Accept', 'application/json');
+      })
+        it("add and delete several post in diffrent orders", async () => {
+        
+        const query =  await request(baseURL).get('/Test').send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest =  await request(baseURL).delete(`/delete`).send({ _id: query.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest.text).toBe('Delete complete');
+
+        await request(baseURL).post(`/add`).send(newTodo2).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+        const query2 =  await request(baseURL).get('/Test').send(newTodo2).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest1 =  await request(baseURL).delete(`/delete`).send({ _id: query2.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest1.text).toBe('Delete complete');
+
+        await request(baseURL).post(`/add`).send(newTodo3).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/add`).send(newTodo4).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+        const query3 =  await request(baseURL).get('/Test').send(newTodo4).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest2 =  await request(baseURL).delete(`/delete`).send({ _id: query3.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest2.text).toBe('Delete complete');
+        const query4 =  await request(baseURL).get('/Test').send(newTodo1).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest3 =  await request(baseURL).delete(`/delete`).send({ _id: query4.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest3.text).toBe('Delete complete');
+
+        await request(baseURL).post(`/add`).send(newTodo5).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/add`).send(newTodo6).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+        const query5 =  await request(baseURL).get('/Test').send(newTodo3).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest4 =  await request(baseURL).delete(`/delete`).send({ _id: query5.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest4.text).toBe('Delete complete');
+        const query6 =  await request(baseURL).get('/Test').send(newTodo5).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest5 =  await request(baseURL).delete(`/delete`).send({ _id: query6.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest5.text).toBe('Delete complete');
+
+        const query7 =  await request(baseURL).get('/Test').send(newTodo6).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        const deleteTest6 =  await request(baseURL).delete(`/delete`).send({ _id: query7.body._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        expect(deleteTest6.text).toBe('Delete complete');
+
+        await request(baseURL).post(`/add`).send( {title : "delete test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+ 
+        });
+      });
+
+      describe("Get /render", () => {
+        it("test if all api that render do so", async () => {
+
+            const response =    await request(baseURL).get('/')
+            //console.log(response.body.error)
+            expect(response.status).toBe(200);
+            expect(response.body.error).toBe(undefined)
+
+            const response1 =    await request(baseURL).get('/')
+            expect(response1.status).toBe(200);
+            expect(response1.body.error).toBe(undefined)
+            //console.log(response.body.error)
+
+            const response2 =    await request(baseURL).get('/instruction')
+            expect(response2.status).toBe(200);
+            expect(response2.body.error).toBe(undefined)
+            //console.log(response.body.error)
+
+            await request(baseURL).post(`/add`).send( {title : "render test complete", date : Date()}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+        });
+      });
+
+      describe("Get /ID", () => {
+          it("test if all post have IDs", async () => {
+  
+              const response =    await request(baseURL).get('/Test2')
+              for (let i = 0; i < response.body.posts.length; i++){
+                console.log(response.body.posts[i]);
+                //const deleteTest6 =  await request(baseURL).delete(`/delete`).send({ _id: response.body.posts[i]._id}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
+                if(response.body.posts[i]._id !== null){
+                    expect(1).toBe(1);
+
+                } 
+                else {
+                    expect(1).toBe(2);
+                }
+              }
+                
+              
+          });
+        });
+-->
