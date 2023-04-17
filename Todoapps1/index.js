@@ -291,7 +291,7 @@ app.post("/advSearch", requireLogin, async (req, res) => {
     });
 
     try {
-      const tasks = await TodoTask.find({content: new RegExp(req.body.content, 'i'), date: new RegExp(newreq.body.date, 'i')}).sort({_id: 1})
+      const tasks = await TodoTask.find({content: new RegExp(req.body.content, 'i'), date: new RegExp(req.body.date, 'i')}).sort({_id: 1})
       res.status(200).render("list.ejs", { todoTasks: tasks });
     }
     catch (err) {
@@ -551,5 +551,57 @@ app.post("/tagTest", requireLogin, async (req, res) => {
   catch (err) {
     console.error(err); 
   }
+});
+//Adv search test
+app.post("/advSearchTest", requireLogin, async (req, res) => {
+  //console.log("adv serch function");
+  //console.log(req.body.date)
+
+  if(req.body.content == "" && req.body.date == ""){
+
+    res.status(500).redirect("/error");
+
+  }
+
+  if(req.body.content == ""){
+    const todoTask = new TodoTask({
+      date: req.body.date,
+  });
+  try {
+    const tasks = await TodoTask.find({date: new RegExp(req.body.date, 'i')}).sort({_id: 1})
+    res.status(200).send(tasks);
+  }
+  catch (err) {
+    console.error(err); 
+  }
+  }
+
+  if(req.body.date == ""){
+    const todoTask = new TodoTask({
+      content: req.body.content,
+  });
+  try {
+    const tasks = await TodoTask.find({content: new RegExp(req.body.content, 'i')}).sort({_id: 1})
+    res.status(200).render("list.ejs", { todoTasks: tasks });
+  }
+  catch (err) {
+    console.error(err); 
+  }
+  }
+
+  if(req.body.date != "" && req.body.content !="") {
+    const todoTask = new TodoTask({
+      content: req.body.content,
+      date : req.body.date,
+    });
+
+    try {
+      const tasks = await TodoTask.find({content: new RegExp(req.body.content, 'i'), date: new RegExp(req.body.date, 'i')}).sort({_id: 1})
+      res.status(200).render("list.ejs", { todoTasks: tasks });
+    }
+    catch (err) {
+      console.error(err); 
+    }
+ }
 });
 

@@ -86,7 +86,7 @@ describe("POST /search", () => {
         await request(baseURL).get('/clear');
         await request(baseURL).get('/clear');
 
-        await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/add`).send( {content : "search test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         
         });
       });
@@ -142,7 +142,7 @@ describe("POST /search", () => {
         await request(baseURL).get('/clear');
         await request(baseURL).get('/clear');
 
-        await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/add`).send( {content : "search test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         
         });
       });
@@ -198,7 +198,7 @@ const newTodo6 = {
     await request(baseURL).get('/clear');
     await request(baseURL).get('/clear');
 
-    await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    await request(baseURL).post(`/add`).send( {content : "search test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
     
     });
     });
@@ -254,7 +254,7 @@ const newTodo6 = {
     await request(baseURL).get('/clear');
     await request(baseURL).get('/clear');
 
-    await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    await request(baseURL).post(`/add`).send( {content : "search test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
     
     });
     });
@@ -310,7 +310,7 @@ const newTodo6 = {
     await request(baseURL).get('/clear');
     await request(baseURL).get('/clear');
 
-    await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    await request(baseURL).post(`/add`).send( {content : "search test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
     
     });
     });
@@ -367,7 +367,7 @@ const newTodo6 = {
     await request(baseURL).get('/clear');
     await request(baseURL).get('/clear');
 
-    await request(baseURL).post(`/add`).send( {content : "delete test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    await request(baseURL).post(`/add`).send( {content : "search test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
     
     });
     });
