@@ -20,17 +20,25 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <div class="todo-container">
 <h2>To-Do List</h2>
 <div class="todo">
-
 <form action="/add" method="POST" class="todo-header">
   <input type="text" name="content">
   <input type="date" name="date">
+  <label for="tag">Chose a tag:</label>
+  <select name="tag" id="tag">
+    <option value="Standard Task">Standard Task</option>
+    <option value="Urgent">Urgent</option>
+    <option value="Low Priority">Low Priority</option>
+    <option value="Routine">Routine</option>
+  </select>
+  <label for="myfile">Select a file:</label>
+<input type="file" id="myfile" name="myfile">
   <button type="submit"><span class="fas fa-plus"></span></button>
 </form>
 
 <ul class="todo-list">
   <% todoTasks.forEach(details => { %>
   <li class="todo-list-item">
-  <div class="todo-list-item-name"><%= details.content %>,<%= details.date %></div>
+  <div class="todo-list-item-name"><%= details.content %>,<%= details.date %>,<%= details.tag %></div>
   </li>
   <% }) %>
 </ul>
