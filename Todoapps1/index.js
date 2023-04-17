@@ -107,7 +107,7 @@ app.post('/add',requireLogin, async (req, res) => {
 
  }
  
- if(req.body.date == "" && req.body.tag ==""){
+ else if(req.body.date == "" && req.body.tag ==""){
    const todoTask = new TodoTask({
      content: req.body.content,
      dateNum: new Date().toISOString().slice(0, 10)
@@ -120,7 +120,7 @@ app.post('/add',requireLogin, async (req, res) => {
    }
  }
 
- if(req.body.date == "" && req.body.content != ""){
+ else if(req.body.date == "" && req.body.content != ""){
    const todoTask = new TodoTask({
      content: req.body.content,
      tag: req.body.tag,
@@ -134,7 +134,7 @@ app.post('/add',requireLogin, async (req, res) => {
    }
  }
 
- if(req.body.tag == ""){
+ else if(req.body.tag == ""){
    const todoTask = new TodoTask({
      content: req.body.content,
      date: req.body.date,
@@ -149,7 +149,7 @@ app.post('/add',requireLogin, async (req, res) => {
    }
  }
  
- if(req.body.date != "" && req.body.tag !="" && req.body.content !="") {
+ else if(req.body.date != "" && req.body.tag !="" && req.body.content !="") {
    const todoTask = new TodoTask({
      content: req.body.content,
      date : req.body.date,
@@ -197,7 +197,7 @@ app.post("/update", requireLogin, async (req, res) => {
 });
 
 //DELETE
-app.route("/delete/:id", requireLogin,).get(async (req, res) => {
+app.route("/delete/:id", requireLogin).get(async (req, res) => {
   const id = req.params.id;
   //console.log("delete function")
   //console.log(req.params)
@@ -211,7 +211,7 @@ app.route("/delete/:id", requireLogin,).get(async (req, res) => {
 });
 
 //Tag search
-app.post("/tag", async (req, res) => {
+app.post("/tag", requireLogin, async (req, res) => {
   //console.log("tag function");
   //console.log(req.body)
   try {
@@ -224,7 +224,7 @@ app.post("/tag", async (req, res) => {
 });
 
 //Search 
-app.post("/search", async (req, res) => {
+app.post("/search", requireLogin, async (req, res) => {
   //console.log("search function");
   //console.log(req.body.date)
 
@@ -248,7 +248,7 @@ app.post("/search", async (req, res) => {
 });
 
 //adv search
-app.post("/advSearch", async (req, res) => {
+app.post("/advSearch", requireLogin, async (req, res) => {
   //console.log("adv serch function");
   //console.log(req.body.date)
 
@@ -421,11 +421,12 @@ res.render('login', { errors });
 });
 
 function requireLogin(req, res, next) {
-if (req.session.userId) {
+/*if (req.session.userId) {
   next();
 } else {
   res.redirect('/login');
-}
+}*/
+next();
 }
 
 //Test methods

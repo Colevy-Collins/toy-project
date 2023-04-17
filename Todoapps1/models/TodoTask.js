@@ -13,7 +13,7 @@ const todoTaskSchema = new mongoose.Schema({
   },
   tag: {
     type: String,
-    defualt: "Standard Task"
+    default: "Standard Task"
   }
 },
 {
