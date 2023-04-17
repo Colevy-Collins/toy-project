@@ -97,7 +97,7 @@ app.get("/list", requireLogin, async (req, res) => {
   }
 });
 
-app.post('/add', async (req, res) => {
+app.post('/add',requireLogin, async (req, res) => {
   //console.log("add req body.content")
   //console.log(req.body.date);
 
