@@ -35,7 +35,7 @@ app.use(session({
 app.get("/", requireLogin, async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
-    res.status(302).render("write.ejs", { todoTasks: tasks });
+    res.status(500).render("write.ejs", { todoTasks: tasks });
   }
   catch (err) {
     console.error(err);
@@ -45,7 +45,7 @@ app.get("/", requireLogin, async (req, res) => {
 app.get('/instruction', requireLogin, function(req, resp) { 
 
   try {
-    resp.status(302).render('instruction.ejs')
+    resp.status(500).render('instruction.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -54,7 +54,7 @@ app.get('/instruction', requireLogin, function(req, resp) {
 app.get('/error', requireLogin, function(req, resp) { 
 
   try {
-    resp.status(302).render('error.ejs')
+    resp.status(500).render('error.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -63,7 +63,7 @@ app.get('/error', requireLogin, function(req, resp) {
 app.get('/tagSearch', requireLogin, function(req, resp) { 
 
   try {
-    resp.status(302).render('tagSearch.ejs')
+    resp.status(500).render('tagSearch.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -72,7 +72,7 @@ app.get('/tagSearch', requireLogin, function(req, resp) {
 app.get('/advSearch', requireLogin, function(req, resp) { 
 
   try {
-    resp.status(302).render('advSearch.ejs')
+    resp.status(500).render('advSearch.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -81,7 +81,7 @@ app.get('/advSearch', requireLogin, function(req, resp) {
 app.get('/search', requireLogin, function(req, resp) { 
 
   try {
-    resp.status(302).render('search.ejs')
+    resp.status(500).render('search.ejs')
   } catch (e) {
     console.error(e);
   } 
@@ -90,7 +90,7 @@ app.get('/search', requireLogin, function(req, resp) {
 app.get("/list", requireLogin, async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
-    res.status(302).render("list.ejs", { todoTasks: tasks });
+    res.status(500).render("list.ejs", { todoTasks: tasks });
   }
   catch (err) {
     console.error(err);
@@ -114,7 +114,7 @@ app.post('/add',requireLogin, async (req, res) => {
  });
    try {
      await todoTask.save();
-     res.status(302).redirect("/");
+     res.status(500).redirect("/");
    } catch (err) {
      res.send(500, err);
    }
@@ -128,7 +128,7 @@ app.post('/add',requireLogin, async (req, res) => {
  });
    try {
      await todoTask.save();
-     res.status(302).redirect("/");
+     res.status(500).redirect("/");
    } catch (err) {
      res.send(500, err);
    }
@@ -143,7 +143,7 @@ app.post('/add',requireLogin, async (req, res) => {
  //console.log(todoTask.dateNum)
    try {
      await todoTask.save();
-     res.status(302).redirect("/");
+     res.status(500).redirect("/");
    } catch (err) {
      res.send(500, err);
    }
@@ -429,60 +429,8 @@ function requireLogin(req, res, next) {
 next();
 }
 
-//Test methods
-app.get('/Test', async function(req, res){
-  const id = req.body._id;
-  //console.log("req")
-  //console.log(req.body);
-
-  if(req.body.date == ""){
-    req.body.date = req.body.defDate
-  }
-  //console.log("defDate")
-  //console.log(req.body.date);
-  try {
-    const response = await TodoTask.findOne({content: req.body.content})
-    //console.log("response")
-    //console.log(response);
-    res.send(response);
-  } catch (err) {
-    res.send(500, err);
-  }
-});
-
-//Test methods
-app.get('/Test2', async function(req, res){
-  const id = req.body._id;
-  //console.log("req")
-  //console.log(req.body);
-
-  if(req.body.date == ""){
-    req.body.date = req.body.defDate
-  }
-  //console.log("defDate")
-  //console.log(req.body.date);
-  try {
-    const response = await TodoTask.exists({ content: req.body.content})
-    console.log(response);
-    //console.log("response")
-    //console.log(response.body);
-    res.send(response);
-  } catch (err) {
-    res.send(500, err);
-  }
-});
-
-app.get("/Test3", async (req, res) => {
-  try {
-    const tasks = await TodoTask.find({}).sort({_id: 1})
-    res.status(200).send(tasks)
-  }
-  catch (err) {
-    console.error(err);
-  }
-});
-
-  app.route("/clear", requireLogin,).get(async (req, res) => {
+// clear
+app.route("/clear", requireLogin,).get(async (req, res) => {
   //console.log("clear function")
   
   try {
@@ -514,5 +462,81 @@ app.get("/Test3", async (req, res) => {
     res.send(500, err);
   }
 
+});
+
+//Test method
+app.get('/Test', async function(req, res){
+  const id = req.body._id;
+  //console.log("req")
+  //console.log(req.body);
+
+  if(req.body.date == ""){
+    req.body.date = req.body.defDate
+  }
+  //console.log("defDate")
+  //console.log(req.body.date);
+  try {
+    const response = await TodoTask.findOne({content: req.body.content})
+    //console.log("response")
+    //console.log(response);
+    res.send(response);
+  } catch (err) {
+    res.send(500, err);
+  }
+});
+
+//Test method
+app.get('/Test2', async function(req, res){
+  const id = req.body._id;
+  //console.log("req")
+  //console.log(req.body);
+
+  if(req.body.date == ""){
+    req.body.date = req.body.defDate
+  }
+  //console.log("defDate")
+  //console.log(req.body.date);
+  try {
+    const response = await TodoTask.exists({ content: req.body.content})
+    console.log(response);
+    //console.log("response")
+    //console.log(response.body);
+    res.send(response);
+  } catch (err) {
+    res.send(500, err);
+  }
+});
+//Test method
+app.get("/Test3", async (req, res) => {
+  try {
+    const tasks = await TodoTask.find({}).sort({_id: 1})
+    res.status(200).send(tasks)
+  }
+  catch (err) {
+    console.error(err);
+  }
+});
+//Search test method
+app.post("/searchTest", requireLogin, async (req, res) => {
+  //console.log("search function");
+  //console.log(req.body.date)
+
+  if(req.body.date1 == "" || req.body.date2 == ""){
+    res.status(500).redirect("/error");
+  }
+
+  if(req.body.date1 != "" && req.body.date2 != "") {
+
+    try {
+      //console.log(req.body.date1)
+      //console.log(req.body.date2)
+      const tasks = await TodoTask.find({dateNum: {"$gte": req.body.date1, "$lte": req.body.date2}}).sort({_id: 1});
+      //console.log(tasks)
+      res.status(200).send(tasks);
+    }
+    catch (err) {
+      console.error(err); 
+    }
+ }
 });
 
