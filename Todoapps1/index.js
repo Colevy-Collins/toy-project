@@ -210,7 +210,7 @@ app.route("/delete/:id", requireLogin).get(async (req, res) => {
   }
 });
 
-//Tag search
+//Tag search - Please edit test when edited
 app.post("/tag", requireLogin, async (req, res) => {
   //console.log("tag function");
   //console.log(req.body)
@@ -223,7 +223,7 @@ app.post("/tag", requireLogin, async (req, res) => {
   }
 });
 
-//Search 
+//Search - Please edit test when edited
 app.post("/search", requireLogin, async (req, res) => {
   //console.log("search function");
   //console.log(req.body.date)
@@ -247,7 +247,7 @@ app.post("/search", requireLogin, async (req, res) => {
  }
 });
 
-//adv search
+//Adv Search - Please edit test when edited
 app.post("/advSearch", requireLogin, async (req, res) => {
   //console.log("adv serch function");
   //console.log(req.body.date)
@@ -538,5 +538,18 @@ app.post("/searchTest", requireLogin, async (req, res) => {
       console.error(err); 
     }
  }
+});
+
+//Tag search test
+app.post("/tagTest", requireLogin, async (req, res) => {
+  //console.log("tag function");
+  //console.log(req.body)
+  try {
+    const tasks = await TodoTask.find({tag: req.body.tag}).sort({_id: 1})
+    res.status(200).send(tasks);
+  }
+  catch (err) {
+    console.error(err); 
+  }
 });
 
