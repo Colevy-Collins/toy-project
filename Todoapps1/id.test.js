@@ -5,7 +5,7 @@ const baseURL = "http://localhost:5500"
 describe("GET /id", () => {
       it("test if posts all post have id", async () => {
 
-        await request(baseURL).post(`/logging`).send({username: 'test', pasword: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/logging`).send({username: 'test', password: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');

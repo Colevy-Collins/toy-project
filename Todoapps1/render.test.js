@@ -6,7 +6,7 @@ const baseURL = "http://localhost:5500"
 describe("GET /render", () => {
       it("test if all api that render do so", async () => {
 
-        await request(baseURL).post(`/logging`).send({username: 'test', pasword: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/logging`).send({username: 'test', password: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
     
             const response =    await request(baseURL).get('/')
             //console.log(response.body.error)

@@ -7,9 +7,10 @@ describe("POST /update", () => {
     const newTodo = {
         content : "test0",
         date : "",
+        tag: "Standard Task"
     }
     beforeAll(async () => {
-        await request(baseURL).post(`/logging`).send({username: 'test', pasword: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/logging`).send({username: 'test', password: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
 
     })

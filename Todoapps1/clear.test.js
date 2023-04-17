@@ -6,7 +6,7 @@ const baseURL = "http://localhost:5500"
 describe("DELETE /clear", () => {
       it("test the error with adding empty post is caught", async () => {
 
-        await request(baseURL).post(`/logging`).send({username: 'test', pasword: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        await request(baseURL).post(`/logging`).send({username: 'test', password: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
 
         await request(baseURL).post(`/add`).send( {content : "test1"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/add`).send( {content : "test2"}).set('Content-Type', 'application/json').set('Accept', 'application/json');

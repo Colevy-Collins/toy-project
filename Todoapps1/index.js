@@ -99,7 +99,7 @@ app.get("/list", requireLogin, async (req, res) => {
 
 app.post('/add',requireLogin, async (req, res) => {
   console.log("add req body.content")
-  console.log(req.body.date);
+  console.log(req.body);
 
  if(req.body.content == ""){
 
@@ -389,7 +389,7 @@ else {
 
 //LOGIN
 app.post('/logging', async (req, res) => {
-//console.log(req.body)
+console.log(req.body)
 const { username, password } = req.body;
 let errors = [];
 try {
