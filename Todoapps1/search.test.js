@@ -78,8 +78,8 @@ describe("POST /search", () => {
         let test4 = []
         expect(isValid(res4, test4)).toBe(true)
 
-        const res5 = await request(baseURL).post(`/searchTest`).send({date1: "2023-04-017", date2: "2024-05-17"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-        let test5 = ["test0","test1","test2","test3","test5"]
+        const res5 = await request(baseURL).post(`/searchTest`).send({date1: "2023-04-17", date2: "2024-05-17"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        let test5 = ["test1","test2","test3","test5"]
         expect(isValid(res5, test5)).toBe(true)
 
 
@@ -359,8 +359,8 @@ const newTodo6 = {
     })
       it("add and search for diffrent sets of posts", async () => {
 
-    const res5 = await request(baseURL).post(`/searchTest`).send({date1: "2023-04-017", date2: "2024-05-17"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-    let test5 = ["test0","test1","test2","test3","test5"]
+    const res5 = await request(baseURL).post(`/searchTest`).send({date1: "2023-04-17", date2: "2024-05-17"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+    let test5 = ["test1","test2","test3","test5"]
     expect(isValid(res5, test5)).toBe(true)
 
 
