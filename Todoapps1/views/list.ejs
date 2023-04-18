@@ -31,7 +31,9 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
     <a href="/delete/<%= todoTasks[i]._id %>" class="delete">
     <span class="fas fa-times"></span>
     </a>
-  </li>
+    <a download href="/list/<%= todoTasks[i].file %>" class="download">
+      <span class="fas fa-plus"></span>
+      </a>  </li>
   <% } %>
 </ul>
 

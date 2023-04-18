@@ -14,7 +14,10 @@ const todoTaskSchema = new mongoose.Schema({
   tag: {
     type: String,
     default: "Standard Task"
-  }
+  },
+  file: {
+    type: Buffer
+  },
 },
 {
   collection : 'POSTS'

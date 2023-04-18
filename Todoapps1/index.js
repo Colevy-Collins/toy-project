@@ -99,7 +99,7 @@ app.get("/list", async (req, res) => {
   }
 });
 
-app.post('/add',requireLogin, async (req, res) => {
+app.post('/add', async (req, res) => {
   // console.log("add req body.content")
   // console.log(req.body);
 
@@ -112,7 +112,8 @@ app.post('/add',requireLogin, async (req, res) => {
  else if(req.body.date == "" && req.body.tag ==""){
    const todoTask = new TodoTask({
      content: req.body.content,
-     dateNum: new Date().toISOString().slice(0, 10)
+     dateNum: new Date().toISOString().slice(0, 10),
+     file: req.body.file
  });
    try {
      await todoTask.save();
@@ -126,7 +127,8 @@ app.post('/add',requireLogin, async (req, res) => {
    const todoTask = new TodoTask({
      content: req.body.content,
      tag: req.body.tag,
-     dateNum: new Date().toISOString().slice(0, 10)
+     dateNum: new Date().toISOString().slice(0, 10),
+     file: req.body.file
  });
    try {
      await todoTask.save();
@@ -140,7 +142,8 @@ app.post('/add',requireLogin, async (req, res) => {
    const todoTask = new TodoTask({
      content: req.body.content,
      date: req.body.date,
-     dateNum : req.body.date
+     dateNum : req.body.date,
+     file: req.body.file
  });
  //console.log(todoTask.dateNum)
    try {
@@ -156,7 +159,8 @@ app.post('/add',requireLogin, async (req, res) => {
      content: req.body.content,
      date : req.body.date,
      tag : req.body.tag,
-     dateNum : req.body.date
+     dateNum : req.body.date,
+     file: req.body.file
    });
    //console.log(todoTask.dateNum)
    try {
