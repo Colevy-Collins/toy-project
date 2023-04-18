@@ -11,6 +11,7 @@ describe("POST /update", () => {
     }
     beforeAll(async () => {
         await request(baseURL).post(`/logging`).send({username: 'test', password: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+        
         await request(baseURL).post(`/add`).send(newTodo).set('Content-Type', 'application/json').set('Accept', 'application/json');
 
     })
@@ -19,7 +20,7 @@ describe("POST /update", () => {
         expect(res.body.content).toBe("this has been updated");
         await request(baseURL).get(`/delete/` + res.body._id);
         const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-        expect(res2.body).toStrictEqual({});
+        expect(res2.body).toStrictEqual([]);
 
         await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
     })
@@ -48,7 +49,7 @@ describe("POST /update", () => {
             expect(res.body.content).toBe("this has been updated");
             await request(baseURL).get(`/delete/` + res.body._id);
             const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-            expect(res2.body).toStrictEqual({});
+            expect(res2.body).toStrictEqual([]);
     
             await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         })
@@ -75,7 +76,7 @@ describe("POST /update", () => {
             expect(res.body.content).toBe("this has been updated");
             await request(baseURL).get(`/delete/` + res.body._id);
             const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-            expect(res2.body).toStrictEqual({});
+            expect(res2.body).toStrictEqual([]);
     
             await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         })
@@ -102,7 +103,7 @@ describe("POST /update", () => {
             expect(res.body.content).toBe("this has been updated");
             await request(baseURL).get(`/delete/` + res.body._id);
             const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-            expect(res2.body).toStrictEqual({});
+            expect(res2.body).toStrictEqual([]);
     
             await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         })
@@ -129,7 +130,7 @@ describe("POST /update", () => {
             expect(res.body.content).toBe("this has been updated");
             await request(baseURL).get(`/delete/` + res.body._id);
             const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-            expect(res2.body).toStrictEqual({});
+            expect(res2.body).toStrictEqual([]);
     
             await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         })
@@ -156,7 +157,7 @@ describe("POST /update", () => {
             expect(res.body.content).toBe("this has been updated");
             await request(baseURL).get(`/delete/` + res.body._id);
             const res2 =  await request(baseURL).get(`/Test2`).send({content : "this has been updated"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
-            expect(res2.body).toStrictEqual({});
+            expect(res2.body).toStrictEqual([]);
     
             await request(baseURL).post(`/add`).send( {content : "update test complete"}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         })
