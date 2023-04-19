@@ -33,8 +33,8 @@ app.use(session({
 // CRUD processing
 
 app.get("/"/*, requireLogin*/, async (req, res) => {
-  console.log("home session")
-  console.log(session.userId);
+//console.log("home session")
+//console.log(session.userId);
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
     res.status(500).render("write.ejs", { todoTasks: tasks });
@@ -196,7 +196,7 @@ app.post("/update"/*, requireLogin*/, async (req, res) => {
 
   //console.log(req.body.date);
   try {
-    await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date, dateNum: req.body.date, tag: req.body.tag })
+    await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date, dateNum: req.body.date, tag: req.body.tag, myfile: req.body.myfile })
     res.redirect("/list");
   } catch (err) {
     res.send(500, err);
@@ -504,7 +504,7 @@ app.get('/Test2'/*, requireLogin*/, async function(req, res){
   //console.log(req.body.date);
   try {
     const response = await TodoTask.find({ content: req.body.content})
-    console.log(response);
+    //console.log(response);
     //console.log("response")
     //console.log(response.body);
     res.send(response);
@@ -695,7 +695,7 @@ else {
   });
   try {
     await newUser.save();
-    console.log("added user")
+  //console.log("added user")
     res.send(newUser);
   } catch (err) {
     res.send(500, err);
@@ -716,7 +716,7 @@ app.get("/Test4"/*, requireLogin*/, async (req, res) => {
 
 //Loggin Test
 app.post('/loggingTest', async (req, res) => {
-  console.log(req.body)
+//console.log(req.body)
   const { username, password } = req.body;
   let errors = [];
   try {
@@ -735,7 +735,7 @@ app.post('/loggingTest', async (req, res) => {
       } else {
         // Create session
         res.send("25");
-        console.log("I am here");
+      //console.log("I am here");
       }
     }
   } catch (err) {

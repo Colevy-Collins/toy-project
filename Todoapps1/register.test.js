@@ -14,6 +14,9 @@ describe("GET /id", () => {
         const deleteTest6 =  await request(baseURL).get('/clearUser');
         const res6 =  await request(baseURL).get(`/Test4`);
         expect(res6.body).toStrictEqual([]);
+
+        await request(baseURL).post(`/createTest`).send({username: 'test', email: 'test1@email', password: '123456', password2: '123456'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
+
     
     });
     });

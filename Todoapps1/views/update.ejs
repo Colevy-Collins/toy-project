@@ -24,16 +24,20 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <form action="/update" method="POST" class="todo-header">
   <input type="text" name="content" value ="<%= todoTasks.content %>">
   <input type="date" name="date">
-  <input name="_id" value ="<%= todoTasks.id %>" readonly="readonly">
-  <h4>This is the currents Post's date</h4>
-  <input type ="text" name="defDate" value ="<%= todoTasks.date %>" readonly="readonly" size = "70">
   <label for="tag">Chose a tag:</label>
   <select name="tag" id="tag">
+    <option value="<%= todoTasks.tag %>"><%= todoTasks.tag %></option>
     <option value="Standard Task">Standard Task</option>
     <option value="Urgent">Urgen</option>
     <option value="Low Priority">Low Priority</option>
     <option value="Routine">routine</option>
   </select>
+  <label for="myfile">Select a file:</label>
+  <input type="file" id="myfile" name="file" value = "<%= todoTasks.myfile %>" >
+  <h4></h4>
+  <h4>This is the currents Post's date</h4>
+  <input type ="text" name="defDate" value ="<%= todoTasks.date %>" readonly="readonly" size = "70">
+  <input name="_id" value ="<%= todoTasks.id %>" readonly="readonly" size = "0">
   <h4></h4>
   <button type="submit"><span class="fas fa-edit"></span></button>
 </form>
