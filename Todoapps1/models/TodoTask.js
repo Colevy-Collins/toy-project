@@ -15,9 +15,22 @@ const todoTaskSchema = new mongoose.Schema({
     type: String,
     default: "Standard Task"
   },
-  file: {
-    type: Buffer
+  filename: {
+    type: String,
+    required: true
   },
+  mimetype: {
+    type: String,
+    required: true
+  },
+  size: {
+    type: Number,
+    required: true
+  },
+  data: {
+    type: Buffer,
+    required: true
+  }
 },
 {
   collection : 'POSTS'

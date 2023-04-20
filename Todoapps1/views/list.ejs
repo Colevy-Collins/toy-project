@@ -31,9 +31,13 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
     <a href="/delete/<%= todoTasks[i]._id %>" class="delete">
     <span class="fas fa-times"></span>
     </a>
-    <a download href="/list/<%= todoTasks[i].file %>" class="download">
-      <span class="fas fa-plus"></span>
-      </a>  </li>
+    <% if (todoTasks[i].data) { %>
+    </a>
+    <a href="/download/<%= todoTasks[i]._id %>" class="download">
+    <span class="fas fa-download"></span>
+    </a>
+    <% } %>
+    </li>
   <% } %>
 </ul>
 
