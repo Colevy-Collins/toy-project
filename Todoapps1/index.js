@@ -105,105 +105,94 @@ app.get("/list"/*, requireLogin*/, async (req, res) => {
   }
 });
 
-app.post('/add', upload.single('fileInput')/*, requireLogin*/, async (req, res) => {
-  // console.log("add req body.content")
-  // console.log(req.body);
-
-  const { originalname, mimetype, buffer } = req.file;
-  const size = buffer.length;
-
-  const file = new File({
-    filename: originalname,
-    mimetype: mimetype,
-    size: size,
-    data: buffer
-  });
+app.post('/add', upload.single('fileIn')/*, requireLogin*/, async (req, res) => {
+  //console.log("add req body.content")
+  //console.log(req);
+  //console.log(req.file);
 
  if(req.body.content == ""){
 
    res.status(500).redirect("/error");
-
- }
- 
- else if(req.body.date == "" && req.body.tag ==""){
-   const todoTask = new TodoTask({
-     content: req.body.content,
-     dateNum: new Date().toISOString().slice(0, 10),
-     filename:originalname,
-     mimetype: mimetype,
-     size: size,
-     data: buffer
- });
-   try {
-     await todoTask.save();
-     res.status(500).redirect("/");
-   } catch (err) {
-     res.send(500, err);
-   }
  }
 
- else if(req.body.date == "" && req.body.content != ""){
-   const todoTask = new TodoTask({
-     content: req.body.content,
-     tag: req.body.tag,
-     dateNum: new Date().toISOString().slice(0, 10),
-     filename:originalname,
-     mimetype: mimetype,
-     size: size,
-     data: buffer
- });
-   try {
-     await todoTask.save();
-     res.status(500).redirect("/");
-   } catch (err) {
-     res.send(500, err);
-   }
- }
+ if(req.file){
+    if(!(req.body.date == "")){
+        const { originalname, mimetype, buffer } = req.file;
+        const size = buffer.length;
 
- else if(req.body.tag == ""){
-   const todoTask = new TodoTask({
-     content: req.body.content,
-     date: req.body.date,
-     dateNum : req.body.date,
-     filename:originalname,
-     mimetype: mimetype,
-     size: size,
-     data: buffer
- });
- //console.log(todoTask.dateNum)
-   try {
-     await todoTask.save();
-     res.status(500).redirect("/");
-   } catch (err) {
-     res.send(500, err);
-   }
- }
- 
- else if(req.body.date != "" && req.body.tag !="" && req.body.content !="") {
-   const todoTask = new TodoTask({
-     content: req.body.content,
-     date : req.body.date,
-     tag : req.body.tag,
-     dateNum : req.body.date,
-     filename:originalname,
-     mimetype: mimetype,
-     size: size,
-     data: buffer
-   });
-   //console.log(todoTask.dateNum)
-   try {
-     await todoTask.save();
-     res.redirect("/");
-   } catch (err) {
-     res.send(500, err);
-   }
-}
+        const todoTask = new TodoTask({
+          content: req.body.content,
+          date : req.body.date,
+          tag : req.body.tag,
+          dateNum : req.body.date,
+          filename:originalname,
+          mimetype: mimetype,
+          size: size,
+          data: buffer
+        });
+        //console.log(todoTask.dateNum)
+        try {
+          await todoTask.save();
+          res.redirect("/");
+        } catch (err) {
+          res.send(500, err);
+        }
+    }else{
+        const { originalname, mimetype, buffer } = req.file;
+        const size = buffer.length;
+        
+        const todoTask = new TodoTask({
+          content: req.body.content,
+          tag: req.body.tag,
+          dateNum: new Date().toISOString().slice(0, 10),
+          filename:originalname,
+          mimetype: mimetype,
+          size: size,
+          data: buffer
+      });
+        try {
+          await todoTask.save();
+          res.status(500).redirect("/");
+        } catch (err) {
+          res.send(500, err);
+        }
+      }
+
+ }else {
+  if(!(req.body.date == "")){
+    const todoTask = new TodoTask({
+      content: req.body.content,
+      date : req.body.date,
+      tag : req.body.tag,
+      dateNum : req.body.date,
+    });
+    //console.log(todoTask.dateNum)
+    try {
+      await todoTask.save();
+      res.redirect("/");
+    } catch (err) {
+      res.send(500, err);
+    }
+  }else{
+      const todoTask = new TodoTask({
+        content: req.body.content,
+        tag: req.body.tag,
+        dateNum: new Date().toISOString().slice(0, 10),
+    });
+      try {
+        await todoTask.save();
+        res.status(500).redirect("/");
+      } catch (err) {
+        res.send(500, err);
+      }
+    }
+  }
 });
 
 //UPDATE
 app.get("/edit/:id"/*, requireLogin*/, async (req, res) => {
-  console.log("update 1")
-  console.log(req.params.id);
+ //console.log("update 1")
+ //console.log(req.params.id);
   const id = req.params.id;
   try {
     const tasks = await TodoTask.findByIdAndUpdate(id, { content: req.body.content })
@@ -213,21 +202,46 @@ app.get("/edit/:id"/*, requireLogin*/, async (req, res) => {
   }
 });
 
-app.post("/update"/*, requireLogin*/, async (req, res) => {
+app.post("/update",  upload.single('fileIn')/*, requireLogin*/, async (req, res) => {
   const id = req.body._id;
+
+  console.log(req.body)
   console.log("update 2")
-  console.log(req.body);
+ //console.log(req.body);
+
+ if(req.body.content == ""){
+
+  res.status(500).redirect("/error");
+}else{
 
   if(req.body.date == ""){
     req.body.date = req.body.defDate
   }
 
-  //console.log(req.body.date);
-  try {
-    await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date, dateNum: req.body.date, tag: req.body.tag, myfile: req.body.myfile })
-    res.redirect("/list");
-  } catch (err) {
-    res.send(500, err);
+    //console.log(req.body.date);
+    if(!req.file){
+
+      try {
+        console.log("no file")
+        await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date, dateNum: req.body.date, tag: req.body.tag, $unset: {filename: 1}, $unset: {mimetype: 1}, $unset: {size: 1}, $unset: {data: 1}})
+        res.redirect("/list");
+      } catch (err) {
+        res.send(500, err);
+      }
+    }else if(req.file){
+      try {
+        const { originalname, mimetype, buffer } = req.file;
+        const size = buffer.length;
+
+        console.log(originalname, mimetype, buffer, size)
+
+        console.log(req.body.content, req.body.date, req.body.date, req.body.tag, originalname, mimetype, size, buffer)
+        await TodoTask.findByIdAndUpdate(id, { content: req.body.content, date: req.body.date, dateNum: req.body.date, tag: req.body.tag, filename: originalname, mimetype: mimetype, size: size, data: buffer })
+        res.redirect("/list");
+      } catch (err) {
+        res.send(500, err);
+      }
+    }
   }
 });
 
@@ -424,7 +438,7 @@ else {
 
 //LOGIN
 app.post('/logging', async (req, res) => {
-console.log(req.body)
+//console.log(req.body)
 const { username, password } = req.body;
 let errors = [];
 try {
@@ -588,7 +602,6 @@ app.post("/searchTest"/*, requireLogin*/, async (req, res) => {
     }
  }
 });
-
 //Tag search test
 app.post("/tagTest"/*, requireLogin*/, async (req, res) => {
   //console.log("tag function");
@@ -653,7 +666,6 @@ app.post("/advSearchTest"/*, requireLogin*/, async (req, res) => {
     }
  }
 });
-
 // clear - move (,) at the end of (requireLogin) in front after testing
 app.route("/clearUser"/*, requireLogin*/).get(async (req, res) => {
   //console.log("clear function")
@@ -688,7 +700,6 @@ app.route("/clearUser"/*, requireLogin*/).get(async (req, res) => {
   }
 
 });
-
 // Creates test
 app.post('/createTest', async (req, res) =>{
   
@@ -745,7 +756,6 @@ else {
   }
 }
 });
-
 //Test method
 app.get("/Test4"/*, requireLogin*/, async (req, res) => {
   try {
@@ -756,7 +766,6 @@ app.get("/Test4"/*, requireLogin*/, async (req, res) => {
     console.error(err);
   }
 });
-
 //Loggin Test
 app.post('/loggingTest', async (req, res) => {
 //console.log(req.body)

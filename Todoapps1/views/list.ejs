@@ -25,13 +25,16 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
   <% for (let i = 0; i < todoTasks.length; i++) { %>
   <li class="todo-list-item">
   <div class="todo-list-item-name"> Tilte <%= todoTasks[i].content %>, Date <%= todoTasks[i].date %>,  tag <%= todoTasks[i].tag %>, ID <%= i + 1 %></div>
+  <label for="file">        </label>
     <a href="/edit/<%= todoTasks[i]._id %>" class="edit">
     <span class="fas fa-edit"></span>
     </a>
+    <label for="file">        </label>
     <a href="/delete/<%= todoTasks[i]._id %>" class="delete">
     <span class="fas fa-times"></span>
     </a>
     <% if (todoTasks[i].data) { %>
+    <label for="file">        </label>
     </a>
     <a href="/download/<%= todoTasks[i]._id %>" class="download">
     <span class="fas fa-download"></span>

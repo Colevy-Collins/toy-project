@@ -4,6 +4,10 @@ const baseURL = "http://localhost:5500"
 
 describe("GET /id", () => {
       it("test if posts all post have id", async () => {
+
+        const deleteTest7 =  await request(baseURL).get('/clearUser');
+        const res7 =  await request(baseURL).get(`/Test4`);
+        expect(res7.body).toStrictEqual([]);
         
         await request(baseURL).post(`/createTest`).send({username: 'testuser1', email: 'test1@email', password: '1234561', password2: '1234561'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
         await request(baseURL).post(`/createTest`).send({username: 'testuser2', email: 'test2@email', password: '1234562', password2: '1234562'}).set('Content-Type', 'application/json').set('Accept', 'application/json');
