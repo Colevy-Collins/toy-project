@@ -6,6 +6,12 @@ const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
 dotenv.config();
 
+const File = require('./models/file');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const TodoTask = require("./models/TodoTask");
 const User = require("./models/userTask");
 
@@ -29,7 +35,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-
 // CRUD processing
 
 app.get("/"/*, requireLogin*/, async (req, res) => {
@@ -92,6 +97,7 @@ app.get('/search'/*, requireLogin*/, function(req, resp) {
 app.get("/list"/*, requireLogin*/, async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
+    //console.log(tasks)
     res.status(500).render("list.ejs", { todoTasks: tasks });
   }
   catch (err) {
@@ -99,9 +105,19 @@ app.get("/list"/*, requireLogin*/, async (req, res) => {
   }
 });
 
-app.post('/add'/*, requireLogin*/, async (req, res) => {
+app.post('/add', upload.single('fileInput')/*, requireLogin*/, async (req, res) => {
   // console.log("add req body.content")
   // console.log(req.body);
+
+  const { originalname, mimetype, buffer } = req.file;
+  const size = buffer.length;
+
+  const file = new File({
+    filename: originalname,
+    mimetype: mimetype,
+    size: size,
+    data: buffer
+  });
 
  if(req.body.content == ""){
 
@@ -113,7 +129,10 @@ app.post('/add'/*, requireLogin*/, async (req, res) => {
    const todoTask = new TodoTask({
      content: req.body.content,
      dateNum: new Date().toISOString().slice(0, 10),
-     file: req.body.file
+     filename:originalname,
+     mimetype: mimetype,
+     size: size,
+     data: buffer
  });
    try {
      await todoTask.save();
@@ -128,7 +147,10 @@ app.post('/add'/*, requireLogin*/, async (req, res) => {
      content: req.body.content,
      tag: req.body.tag,
      dateNum: new Date().toISOString().slice(0, 10),
-     file: req.body.file
+     filename:originalname,
+     mimetype: mimetype,
+     size: size,
+     data: buffer
  });
    try {
      await todoTask.save();
@@ -143,7 +165,10 @@ app.post('/add'/*, requireLogin*/, async (req, res) => {
      content: req.body.content,
      date: req.body.date,
      dateNum : req.body.date,
-     file: req.body.file
+     filename:originalname,
+     mimetype: mimetype,
+     size: size,
+     data: buffer
  });
  //console.log(todoTask.dateNum)
    try {
@@ -160,7 +185,10 @@ app.post('/add'/*, requireLogin*/, async (req, res) => {
      date : req.body.date,
      tag : req.body.tag,
      dateNum : req.body.date,
-     file: req.body.file
+     filename:originalname,
+     mimetype: mimetype,
+     size: size,
+     data: buffer
    });
    //console.log(todoTask.dateNum)
    try {
@@ -468,6 +496,21 @@ app.route("/clear"/*requireLogin,*/).get(async (req, res) => {
     res.send(500, err);
   }
 
+});
+
+// Downloads
+app.get('/download/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const file = await TodoTask.findById(id);
+    res.setHeader('Content-Type', file.mimetype);
+    res.setHeader('Content-Disposition', `attachment; filename=${file.filename}`);
+    res.send(file.data);
+  } catch (error) {
+    console.error(error);
+    res.send('File not found');
+  }
 });
 
 //Test method
