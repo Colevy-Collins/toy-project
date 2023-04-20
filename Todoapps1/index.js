@@ -37,7 +37,9 @@ app.use(session({
 }));
 // CRUD processing
 
-app.get("/"/*, requireLogin*/, async (req, res) => {
+// to test, use controle f to find ', requireLogin' and replace it with /*, requireLogin*/
+
+app.get("/", requireLogin , async (req, res) => {
 //console.log("home session")
 //console.log(session.userId);
   try {
@@ -49,7 +51,7 @@ app.get("/"/*, requireLogin*/, async (req, res) => {
   }
 });
 
-app.get('/instruction'/*, requireLogin*/, function(req, resp) { 
+app.get('/instruction', requireLogin , function(req, resp) { 
 
   try {
     resp.status(500).render('instruction.ejs')
@@ -58,7 +60,7 @@ app.get('/instruction'/*, requireLogin*/, function(req, resp) {
   } 
 });
 
-app.get('/error'/*, requireLogin*/, function(req, resp) { 
+app.get('/error', requireLogin , function(req, resp) { 
 
   try {
     resp.status(500).render('error.ejs')
@@ -67,7 +69,7 @@ app.get('/error'/*, requireLogin*/, function(req, resp) {
   } 
 });
 
-app.get('/tagSearch'/*, requireLogin*/, function(req, resp) { 
+app.get('/tagSearch', requireLogin , function(req, resp) { 
 
   try {
     resp.status(500).render('tagSearch.ejs')
@@ -76,7 +78,7 @@ app.get('/tagSearch'/*, requireLogin*/, function(req, resp) {
   } 
 });
 
-app.get('/advSearch'/*, requireLogin*/, function(req, resp) { 
+app.get('/advSearch', requireLogin , function(req, resp) { 
 
   try {
     resp.status(500).render('advSearch.ejs')
@@ -85,7 +87,7 @@ app.get('/advSearch'/*, requireLogin*/, function(req, resp) {
   } 
 });
 
-app.get('/search'/*, requireLogin*/, function(req, resp) { 
+app.get('/search', requireLogin , function(req, resp) { 
 
   try {
     resp.status(500).render('search.ejs')
@@ -94,7 +96,7 @@ app.get('/search'/*, requireLogin*/, function(req, resp) {
   } 
 });
 
-app.get("/list"/*, requireLogin*/, async (req, res) => {
+app.get("/list", requireLogin , async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
     //console.log(tasks)
@@ -105,7 +107,7 @@ app.get("/list"/*, requireLogin*/, async (req, res) => {
   }
 });
 
-app.post('/add', upload.single('fileIn')/*, requireLogin*/, async (req, res) => {
+app.post('/add', upload.single('fileIn'), requireLogin , async (req, res) => {
   //console.log("add req body.content")
   //console.log(req);
   //console.log(req.file);
@@ -190,7 +192,7 @@ app.post('/add', upload.single('fileIn')/*, requireLogin*/, async (req, res) => 
 });
 
 //UPDATE
-app.get("/edit/:id"/*, requireLogin*/, async (req, res) => {
+app.get("/edit/:id", requireLogin , async (req, res) => {
  //console.log("update 1")
  //console.log(req.params.id);
   const id = req.params.id;
@@ -202,7 +204,7 @@ app.get("/edit/:id"/*, requireLogin*/, async (req, res) => {
   }
 });
 
-app.post("/update",  upload.single('fileIn')/*, requireLogin*/, async (req, res) => {
+app.post("/update",  upload.single('fileIn'), requireLogin , async (req, res) => {
   const id = req.body._id;
 
   console.log(req.body)
@@ -260,7 +262,7 @@ app.route("/delete/:id").get(async (req, res) => {
 });
 
 //Tag search - Please edit test when edited
-app.post("/tag"/*, requireLogin*/, async (req, res) => {
+app.post("/tag", requireLogin , async (req, res) => {
   //console.log("tag function");
   //console.log(req.body)
   try {
@@ -273,7 +275,7 @@ app.post("/tag"/*, requireLogin*/, async (req, res) => {
 });
 
 //Search - Please edit test when edited
-app.post("/search"/*, requireLogin*/, async (req, res) => {
+app.post("/search", requireLogin , async (req, res) => {
   //console.log("search function");
   //console.log(req.body.date)
 
@@ -297,7 +299,7 @@ app.post("/search"/*, requireLogin*/, async (req, res) => {
 });
 
 //Adv Search - Please edit test when edited
-app.post("/advSearch"/*, requireLogin*/, async (req, res) => {
+app.post("/advSearch", requireLogin , async (req, res) => {
   //console.log("adv serch function");
   //console.log(req.body.date)
 
@@ -367,7 +369,7 @@ app.get('/login', function(req, resp) {
   } 
 });
 
-app.get('/account'/*, requireLogin*/, function(req, res) {
+app.get('/account', requireLogin , function(req, res) {
   User.findOne({ userID: req.session.userId })
     .then(user => {
       res.render('account', { user });
@@ -478,7 +480,7 @@ if (req.session.userId) {
 }
 
 // clear - move (,) at the end of (requireLogin) in front after testing
-app.route("/clear"/*requireLogin,*/).get(async (req, res) => {
+app.route("/clear", requireLogin).get(async (req, res) => {
   //console.log("clear function")
   
   try {
@@ -528,7 +530,7 @@ app.get('/download/:id', async (req, res) => {
 });
 
 //Test method
-app.get('/Test'/*, requireLogin*/, async function(req, res){
+app.get('/Test', requireLogin , async function(req, res){
   const id = req.body._id;
   //console.log("req")
   //console.log(req.body);
@@ -549,7 +551,7 @@ app.get('/Test'/*, requireLogin*/, async function(req, res){
 });
 
 //Test method
-app.get('/Test2'/*, requireLogin*/, async function(req, res){
+app.get('/Test2', requireLogin , async function(req, res){
   const id = req.body._id;
   //console.log("req")
   //console.log(req.body);
@@ -570,7 +572,7 @@ app.get('/Test2'/*, requireLogin*/, async function(req, res){
   }
 });
 //Test method
-app.get("/Test3"/*, requireLogin*/, async (req, res) => {
+app.get("/Test3", requireLogin , async (req, res) => {
   try {
     const tasks = await TodoTask.find({}).sort({_id: 1})
     res.status(200).send(tasks)
@@ -580,7 +582,7 @@ app.get("/Test3"/*, requireLogin*/, async (req, res) => {
   }
 });
 //Search test method
-app.post("/searchTest"/*, requireLogin*/, async (req, res) => {
+app.post("/searchTest", requireLogin , async (req, res) => {
   //console.log("search function");
   //console.log(req.body.date)
 
@@ -603,7 +605,7 @@ app.post("/searchTest"/*, requireLogin*/, async (req, res) => {
  }
 });
 //Tag search test
-app.post("/tagTest"/*, requireLogin*/, async (req, res) => {
+app.post("/tagTest", requireLogin , async (req, res) => {
   //console.log("tag function");
   //console.log(req.body)
   try {
@@ -615,7 +617,7 @@ app.post("/tagTest"/*, requireLogin*/, async (req, res) => {
   }
 });
 //Adv search test
-app.post("/advSearchTest"/*, requireLogin*/, async (req, res) => {
+app.post("/advSearchTest", requireLogin , async (req, res) => {
   //console.log("adv serch function");
   //console.log(req.body.date)
 
@@ -667,7 +669,7 @@ app.post("/advSearchTest"/*, requireLogin*/, async (req, res) => {
  }
 });
 // clear - move (,) at the end of (requireLogin) in front after testing
-app.route("/clearUser"/*, requireLogin*/).get(async (req, res) => {
+app.route("/clearUser", requireLogin).get(async (req, res) => {
   //console.log("clear function")
   
   try {
@@ -757,7 +759,7 @@ else {
 }
 });
 //Test method
-app.get("/Test4"/*, requireLogin*/, async (req, res) => {
+app.get("/Test4", requireLogin , async (req, res) => {
   try {
     const tasks = await User.find({}).sort({_id: 1})
     res.status(200).send(tasks)
