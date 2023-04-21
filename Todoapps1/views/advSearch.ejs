@@ -18,30 +18,14 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <body>
   <%- include('nav.ejs') %>
 <div class="todo-container">
-<h2>To-Do List</h2>
+<h2>Advanced Search</h2>
 <div class="todo">
-<form action="/add" method="POST" enctype="multipart/form-data">
+<h4>Please enter as muct search information as you want. Please use exact information </h4>
+<form action="/advSearch" method="POST" class="todo-header">
   <input type="text" name="content">
   <input type="date" name="date">
-  <label for="tag">Chose a tag:</label>
-  <select name="tag" id="tag">
-    <option value="Standard Task">Standard Task</option>
-    <option value="Urgent">Urgent</option>
-    <option value="Low Priority">Low Priority</option>
-    <option value="Routine">Routine</option>
-  </select>
-  <label for="file">Select a file:</label>
-  <input type="file" name="fileIn">
   <button type="submit"><span class="fas fa-plus"></span></button>
 </form>
-
-<ul class="todo-list">
-  <% todoTasks.forEach(details => { %>
-  <li class="todo-list-item">
-  <div class="todo-list-item-name"><%= details.content %>,<%= details.date %>,<%= details.tag %></div>
-  </li>
-  <% }) %>
-</ul>
 
 </div>
 </div>

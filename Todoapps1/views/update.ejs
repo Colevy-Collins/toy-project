@@ -20,16 +20,25 @@ integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7
 <div class="todo-container">
 <h2>Update List</h2>
 <div class="todo">
-
-<form action="/update" method="POST" class="todo-header">
-  <input type="text" name="content" value ="<%= todoTasks.content %>">
+<form action="/update" method="POST" enctype="multipart/form-data">
+  <input type="text" name="content">
   <input type="date" name="date">
-  <input name="_id" value ="<%= todoTasks.id %>" readonly="readonly">
+  <label for="tag">Chose a tag:</label>
+  <select name="tag" id="tag">
+    <option value="Standard Task">Standard Task</option>
+    <option value="Urgent">Urgent</option>
+    <option value="Low Priority">Low Priority</option>
+    <option value="Routine">Routine</option>
+  </select>
+  <label for="file">Select a file:</label>
+  <input type="file" name="fileIn">
   <h4>This is the currents Post's date</h4>
-  <input type ="text" name="defDate" value ="<%= todoTasks.date %>" readonly="readonly" size = "70">
+  <input type ="text" name="defDate" value ="<%= todoTasks.date %>" readonly="readonly" size = "10">
+  <input name="_id" value ="<%= todoTasks._id %>" readonly="readonly" size = "1">
   <h4></h4>
-  <button type="submit"><span class="fas fa-edit"></span></button>
+  <button type="submit"><span class="fas fa-plus"></span></button>
 </form>
+
 
 </div>
 </div>

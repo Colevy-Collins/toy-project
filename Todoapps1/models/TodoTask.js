@@ -5,8 +5,27 @@ const todoTaskSchema = new mongoose.Schema({
     required: true
   },
   date: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: new Date().toISOString().slice(0, 10)
+  },
+  dateNum: {
+    type : Date
+  },
+  tag: {
+    type: String,
+    default: "Standard Task"
+  },
+  filename: {
+    type: String,
+  },
+  mimetype: {
+    type: String,
+  },
+  size: {
+    type: Number,
+  },
+  data: {
+    type: Buffer,
   }
 },
 {

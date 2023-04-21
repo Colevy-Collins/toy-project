@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+<title>Todo App</title>
+<link rel="stylesheet" href="/static/stylesheets/style.css" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Baloo+Bhai|Candal|Chewy&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+</head>
+<body>
+  <%- include('nav.ejs') %>
+<div class="todo-container">
+<div class="todo">
+
+    <% if(typeof errors != 'undefined'){ %> 
+        <br>
+        <div class="m-auto col-md-6 alert alert-danger">
+        <ul>
+        <% errors.forEach(function(error) { %>
+          <li><%= error.msg %></li>
+        <% }); %> 
+        </ul>
+        </div>
+    <% } %>
+    <% if(typeof accSuccess != 'undefined'){ %> 
+        <br>
+        <div class="m-auto col-md-6 alert alert-success">
+        <% accSuccess.forEach(function(success) { %>
+          <%= success.msg %>
+        <% }); %>
+        </div>
+    <% } %>
+
+    <div class="col-md-6 m-auto">
+            <h1 class="text-center mb-3">Register</h1>
+            <form action="/create" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="username" id="username" name="username" class="form-control" placeholder="Enter Username" value="<%= typeof name != 'undefined' ? name : '' %>" >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email" value="<%= typeof email != 'undefined' ? email : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Create Pasword" value="<%= typeof email != 'undefined' ? password : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Pasword" value="<%= typeof email != 'undefined' ? password2 : '' %>">
+                </div>
+                <button type="submit" class="btn btn-secondary btn-block">Register</button>
+            </form>
+            <p class="lead mt-4">Have An Account? <a href="/login">Login</a></p>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+</body>
