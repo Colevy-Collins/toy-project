@@ -114,6 +114,7 @@ app.post('/add', upload.single('fileIn'), requireLogin , async (req, res) => {
  if(req.body.content == ""){
 
    res.status(500).redirect("/error");
+   return;
  }
 
  if(req.file){
