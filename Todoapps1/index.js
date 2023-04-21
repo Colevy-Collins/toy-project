@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require('uuid');
 const session = require('express-session');
 dotenv.config();
 
-const File = require('./models/file');
 const multer = require('multer');
 
 const storage = multer.memoryStorage();
