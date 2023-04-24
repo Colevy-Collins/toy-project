@@ -36,7 +36,7 @@ app.use(session({
 }));
 // CRUD processing
 
-// to test, use controle f to find ', requireLogin' and replace it with /*, requireLogin*/
+// to test, use control f to find ', requireLogin' and replace it with “/*, requireLogin*/”
 
 app.get("/", requireLogin , async (req, res) => {
 //console.log("home session")
